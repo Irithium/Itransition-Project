@@ -1,18 +1,17 @@
 require("dotenv").config();
 const cors = require("cors");
+const morgan = require("morgan");
 const express = require("express");
 const passport = require("passport");
 
-const app = express();
+const app = require("./router/router.js");
 const port = process.env.PORT || 5000;
 
+app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 
 const startServer = async () => {
   try {

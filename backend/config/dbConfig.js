@@ -1,4 +1,6 @@
-require("dotenv").config;
+const { DB_DIALECT } = require("../constants.js");
+
+require("dotenv").config();
 
 module.exports = {
   development: {

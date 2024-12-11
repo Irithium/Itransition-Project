@@ -18,12 +18,10 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: true,
         unique: true,
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: true,
       },
       role: {
         type: Sequelize.STRING,

@@ -1,5 +1,6 @@
 "use strict";
 
+const { UUIDV4 } = require("sequelize");
 const { sequelize } = require("../models");
 
 /** @type {import('sequelize-cli').Migration} */
@@ -9,25 +10,23 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.BIGINT,
-        autoIncrement: true,
+        type: Sequelize.UUID,
+        defaultValue: UUIDV4,
       },
       title: {
-        allowNull: false,
         type: Sequelize.STRING,
+        allowNull: false,
       },
       description: {
+        type: Sequelize.TEXT,
         allowNull: false,
-        type: Sequelize.TEXT("medium"),
       },
-      email: {
+      image_url: {
         type: Sequelize.STRING,
-        allowNull: true,
-        unique: true,
       },
-      password: {
+      topics: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       role: {
         type: Sequelize.STRING,

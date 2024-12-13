@@ -33,7 +33,12 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       isAdmin: {
-        type: DataTypes.STRING,
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      isBlocked: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
     },
     {

@@ -9,7 +9,6 @@ module.exports = (sequelize) => {
       Template.hasMany(models.Forms, { foreignKey: "templateId" });
       Template.hasMany(models.Comments, { foreignKey: "templateId" });
       Template.hasMany(models.TemplateLikes, { foreignKey: "templateId" });
-      Template.hasMany(models.Answers, { foreignKey: "templateId" });
       Template.belongsToMany(models.Tags, {
         through: "TemplateTags",
         foreignKey: "templateId",

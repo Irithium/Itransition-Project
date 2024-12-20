@@ -1,0 +1,41 @@
+{
+  "SUCCESS_MESSAGES": {
+    "REGISTERED": "Registration successful! ",
+    "LOGIN": "Welcome back!",
+    "TEMPLATE_CREATED": "Template created successfully. Start adding questions!",
+    "FORM_SUBMITTED": "Form submitted successfully. Thank you for your response!",
+    "UPDATED": "Your information has been updated successfully.",
+    "USER_UPDATED": "Data updated successfully.",
+    "ADMIN_ASSIGNED": "Admin privileges given successfully.",
+    "ADMIN_REMOVED": "Admin privileges revoked successfully.",
+    "USER_BLOCKED": "User has been blocked.",
+    "USER_UNBLOCKED": "User has been unblocked.",
+    "USER_DELETED": "Deleted successfully.",
+    "TEMPLATE_DELETED": "Template deleted successfully.",
+    "FORM_DELETED": "Form deleted successfully."
+  },
+  "ERROR_MESSAGES": {
+    "ACCESS_DENIED": "Access denied. No token provided. Please log in.",
+    "USER_NOT_FOUND": "User not found. Please verify the credentials and try again.",
+    "USER_ALREADY_EXISTS": "A user with this email already exists. Log in or try another",
+    "INVALID_CREDENTIALS": "Invalid credentials. Ensure your information is correct.",
+    "REGISTER_FAILED": "Registration could not be completed. Please try again later.",
+    "LOGIN_FAILED": "Login failed. Check your information and try again.",
+    "ACCOUNT_BLOCKED": "Your account has been blocked. Please contact support.",
+    "INVALID_TOKEN": "Invalid token. You need to log in again.",
+    "USER_ID_REQUIRED": "User  ID is required. Please verify the information.",
+    "ERROR_DELETING_USERS": "Could not delete the user. Please try again later.",
+    "ACTION_FAILED": "An error occurred. Please try again later.",
+    "TEMPLATE_NOT_FOUND": "Template not found. It might have been deleted.",
+    "FORM_NOT_FOUND": "Form not found. Please ensure the link is correct.",
+    "TEMPLATE_MANAGEMENT_ERROR": "You do not have permission to manage this template.",
+    "FORM_MANAGEMENT_ERROR": "You do not have permission to manage this form.",
+    "COMMENTS_FETCH_FAILED": "There was an error loading comments. Please try reloading the page.",
+    "TAGS_LOAD_FAILED": "Failed to load tags. Please try again later.",
+    "TEMPLATE_ACCESS_DENIED": "You do not have access to this template. Check your permissions.",
+    "ADMIN_ACCESS_REQUIRED": "Admin privileges are required for this.",
+    "FORM_ACCESS_DENIED": "You do not have access to this form. Make sure you have the necessary permissions.",
+    "SERVER_ERROR": "Internal server error, please try again later",
+    "SEARCH_FAILED": "There has been a search error, please try again."
+  }
+}

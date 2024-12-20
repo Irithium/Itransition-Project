@@ -3,13 +3,13 @@ const { Model, DataTypes } = require("sequelize");
 module.exports = (sequelize) => {
   class Templates extends Model {
     static associate(models) {
-      Template.belongsTo(models.Users, { foreignKey: "authorId" });
-      Template.belongsTo(models.Topics, { foreignKey: "topicId" });
-      Template.hasMany(models.Questions, { foreignKey: "templateId" });
-      Template.hasMany(models.Forms, { foreignKey: "templateId" });
-      Template.hasMany(models.Comments, { foreignKey: "templateId" });
-      Template.hasMany(models.TemplateLikes, { foreignKey: "templateId" });
-      Template.belongsToMany(models.Tags, {
+      Templates.belongsTo(models.Users, { foreignKey: "authorId" });
+      Templates.belongsTo(models.Topics, { foreignKey: "topicId" });
+      Templates.hasMany(models.Questions, { foreignKey: "templateId" });
+      Templates.hasMany(models.Forms, { foreignKey: "templateId" });
+      Templates.hasMany(models.Comments, { foreignKey: "templateId" });
+      Templates.hasMany(models.TemplateLikes, { foreignKey: "templateId" });
+      Templates.belongsToMany(models.Tags, {
         through: "TemplateTags",
         foreignKey: "templateId",
       });
@@ -49,4 +49,6 @@ module.exports = (sequelize) => {
       timestamps: true,
     }
   );
+
+  return Templates;
 };

@@ -1,0 +1,40 @@
+{
+  "SUCCESS_MESSAGES": {
+    "REGISTERED": "¡Registro exitoso!",
+    "LOGIN": "¡Bienvenido de nuevo!",
+    "TEMPLATE_CREATED": "Plantilla creada con éxito. ¡Empieza a agregar preguntas!",
+    "FORM_SUBMITTED": "Formulario enviado con éxito. ¡Gracias por tu respuesta!",
+    "UPDATED": "Tus datos han sido actualizados con éxito.",
+    "USER_UPDATED": "Datos actualizado correctamente",
+    "ADMIN_ASSIGNED": "Privilegios de administrador otorgados correctamente.",
+    "ADMIN_REMOVED": "Privilegios de administrador revocados correctamente.",
+    "USER_BLOCKED": "Usuario ha sido bloqueado.",
+    "USER_UNBLOCKED": "Usuario ha sido desbloqueado.",
+    "USER_DELETED": "Selección borrada con exito.",
+    "TEMPLATE_DELETED": "Plantilla eliminada correctamente.",
+    "FORM_DELETED": "Formulario eliminado correctamente."
+  },
+  "ERROR_MESSAGES": {
+    "ACCESS_DENIED": "Acceso denegado. No has proporcionado un token. Por favor, inicia sesión.",
+    "USER_NOT_FOUND": "No se encontró el usuario. Verifica tus credenciales e intenta nuevamente.",
+    "USER_ALREADY_EXISTS": "Ya existe un usuario con este correo. Ingresa o trata con otro.",
+    "INVALID_CREDENTIALS": "Credenciales inválidas. Asegúrate de que tu información sea correcta.",
+    "REGISTER_FAILED": "No se pudo completar el registro. Por favor, intenta más tarde.",
+    "LOGIN_FAILED": "Iniciar sesión ha fallado. Revisa tu información y vuelve a intentarlo.",
+    "ACCOUNT_BLOCKED": "Tu cuenta está bloqueada. Contacta al soporte.",
+    "INVALID_TOKEN": "Token inválido. Necesitas iniciar sesión otra vez.",
+    "USER_ID_REQUIRED": "El ID del usuario es necesario. Verifica la información.",
+    "ERROR_DELETING_USERS": "No se pudo eliminar el usuario. Por favor, intenta más tarde .",
+    "ACTION_FAILED": "Ocurrió un error. Por favor, intenta de nuevo más tarde.",
+    "TEMPLATE_NOT_FOUND": "No se pudo encontrar la plantilla. Puede que haya sido eliminada.",
+    "FORM_NOT_FOUND": "No se pudo encontrar el formulario. Asegúrate de que el enlace sea correcto.",
+    "TEMPLATE_MANAGEMENT_ERROR": "No tienes permisos para gestionar esta plantilla.",
+    "FORM_MANAGEMENT_ERROR": "No tienes permisos para gestionar este formulario.",
+    "COMMENTS_FETCH_FAILED": "Hubo un error al cargar los comentarios. Intenta recargar la página.",
+    "TAGS_LOAD_FAILED": "No se pudieron cargar las etiquetas. Vuelve a intentarlo más tarde.",
+    "TEMPLATE_ACCESS_DENIED": "No tienes acceso a esta plantilla. Revisa tus permisos.",
+    "FORM_ACCESS_DENIED": "No tienes acceso a este formulario. Asegúrate de que tienes los permisos necesarios.",
+    "SERVER_ERROR": "Error interno en el servidor, por favor intente más tarde",
+    "SEARCH_FAILED": "Ha ocurrido un error en la búsqueda, por favor intente nuevamente."
+  }
+}

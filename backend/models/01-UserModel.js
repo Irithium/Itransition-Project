@@ -4,11 +4,11 @@ const { Model, DataTypes } = require("sequelize");
 module.exports = (sequelize) => {
   class Users extends Model {
     static associate(models) {
-      User.hasMany(models.Templates, { foreignKey: "authorId" });
-      User.hasMany(models.Comments, { foreignKey: "userId" });
-      User.hasMany(models.CommentLikes, { foreignKey: "userId" });
-      User.hasMany(models.TemplateLikes, { foreignKey: "userId" });
-      User.hasMany(models.Forms, { foreignKey: "userId" });
+      Users.hasMany(models.Templates, { foreignKey: "authorId" });
+      Users.hasMany(models.Comments, { foreignKey: "userId" });
+      Users.hasMany(models.CommentLikes, { foreignKey: "userId" });
+      Users.hasMany(models.TemplateLikes, { foreignKey: "userId" });
+      Users.hasMany(models.Forms, { foreignKey: "userId" });
     }
   }
 
@@ -47,4 +47,6 @@ module.exports = (sequelize) => {
       timestamps: true,
     }
   );
+
+  return Users;
 };

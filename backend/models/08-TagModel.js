@@ -1,13 +1,16 @@
 const { Model, DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  class Topics extends Model {
+  class Tags extends Model {
     static associate(models) {
-      Topics.hasMany(models.Templates, { foreignKey: "topicId" });
+      Tags.belongsToMany(models.Templates, {
+        through: "TemplateTags",
+        foreignKey: "tagId",
+      });
     }
   }
 
-  Topics.init(
+  Tags.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -22,8 +25,10 @@ module.exports = (sequelize) => {
     },
     {
       sequelize,
-      modelName: "Topics",
+      modelName: "Tags",
       timestamps: true,
     }
   );
+
+  return Tags;
 };

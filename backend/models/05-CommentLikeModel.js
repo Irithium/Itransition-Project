@@ -30,4 +30,6 @@ module.exports = (sequelize) => {
       timestamps: true,
     }
   );
+
+  return CommentLikes;
 };

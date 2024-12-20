@@ -1,24 +1,19 @@
 const { Model, DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  class Forms extends Model {
+  class TemplateLikes extends Model {
     static associate(models) {
-      Forms.belongsTo(models.Users, { foreignKey: "userId" });
-      Forms.belongsTo(models.Templates, { foreignKey: "templateId" });
-      Forms.belongsTo(models.Questions, { foreignKey: "questionId" });
+      TemplateLikes.belongsTo(models.Users, { foreignKey: "userId" });
+      TemplateLikes.belongsTo(models.Templates, { foreignKey: "templateId" });
     }
   }
 
-  Forms.init(
+  TemplateLikes.init(
     {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-      },
-      content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
       },
       userId: {
         type: DataTypes.BIGINT,
@@ -28,15 +23,13 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      questionId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-      },
     },
     {
       sequelize,
-      modelName: "Forms",
+      modelName: "TemplateLikes",
       timestamps: true,
     }
   );
+
+  return TemplateLikes;
 };

@@ -43,7 +43,7 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       accessSettings: {
-        type: Sequelize.JSON,
+        type: DataTypes.JSON,
         allowNull: false,
       },
     },

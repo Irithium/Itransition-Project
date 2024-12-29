@@ -22,6 +22,10 @@ app.use(passport.initialize());
 
 app.use("/api", router);
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the API");
+});
+
 const startServer = async () => {
   try {
     console.log("Connection has been established successfully.");

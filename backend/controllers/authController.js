@@ -67,7 +67,7 @@ exports.loginUser = async (req, res) => {
         .json({ message: req.t("ERROR_MESSAGES.AUTH.INVALID_CREDENTIALS") });
     }
 
-    await User.update({ lastActivity: new Date() }, { where: { id: user.id } });
+    await Users.update({ createdAt: new Date() }, { where: { id: user.id } });
 
     const token = jwt.sign(
       { id: user.id, isAdmin: user.isAdmin },

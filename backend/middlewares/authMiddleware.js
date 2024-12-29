@@ -1,4 +1,4 @@
-const { jwt } = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const { STATUS_CODES } = require("../constants");
 const { Users } = require("../models");
 
@@ -13,7 +13,6 @@ const authenticateJWT = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     req.user = await Users.findByPk(decoded.id);
 
     if (!req.user) {

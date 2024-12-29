@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
-      userId: {
+      authorId: {
         type: Sequelize.BIGINT,
         references: {
           model: "Users",

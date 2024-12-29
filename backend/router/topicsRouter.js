@@ -1,7 +1,8 @@
 const router = require("express").Router();
+const topicController = require("../controllers/topicController");
 
-router.get("/", async (req, res) => {
-  res.send("HERE GOES THE TOPIC ROUTES");
-});
+router.post("/", topicController.createTopic);
+router.get("/", topicController.getTopics);
+router.delete("/:id", topicController.deleteTopic);
 
 module.exports = router;

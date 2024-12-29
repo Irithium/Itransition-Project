@@ -1,40 +1,115 @@
 {
   "SUCCESS_MESSAGES": {
-    "REGISTERED": "¡Registro exitoso!",
-    "LOGIN": "¡Bienvenido de nuevo!",
-    "TEMPLATE_CREATED": "Plantilla creada con éxito. ¡Empieza a agregar preguntas!",
-    "FORM_SUBMITTED": "Formulario enviado con éxito. ¡Gracias por tu respuesta!",
-    "UPDATED": "Tus datos han sido actualizados con éxito.",
-    "USER_UPDATED": "Datos actualizado correctamente",
-    "ADMIN_ASSIGNED": "Privilegios de administrador otorgados correctamente.",
-    "ADMIN_REMOVED": "Privilegios de administrador revocados correctamente.",
-    "USER_BLOCKED": "Usuario ha sido bloqueado.",
-    "USER_UNBLOCKED": "Usuario ha sido desbloqueado.",
-    "USER_DELETED": "Selección borrada con exito.",
-    "TEMPLATE_DELETED": "Plantilla eliminada correctamente.",
-    "FORM_DELETED": "Formulario eliminado correctamente."
+    "REGISTERED": "¡Registro exitoso! ¡Bienvenido a bordo!",
+    "LOGIN": "¡Bienvenido de nuevo! ¡Nos alegra verte de nuevo!",
+    "TEMPLATE": {
+      "CREATED": "Plantilla creada con éxito.",
+      "UPDATED": "Plantilla actualizada con éxito.",
+      "DELETED": "Plantilla eliminada con éxito."
+    },
+    "FORM": {
+      "SUBMITTED": "Formulario enviado con éxito. ¡Gracias por tu respuesta!",
+      "UPDATED": "Formulario actualizado con éxito.",
+      "DELETED": "Formulario eliminado con éxito."
+    },
+    "USER": {
+      "UPDATED": "Datos del usuario actualizados con éxito.",
+      "BLOCKED": "Usuario bloqueado con éxito.",
+      "UNBLOCKED": "Usuario desbloqueado con éxito.",
+      "DELETED": "Usuario eliminado con éxito."
+    },
+    "ADMIN": {
+      "ASSIGNED": "Privilegios de administrador asignados con éxito.",
+      "REMOVED": "Privilegios de administrador revocados con éxito."
+    },
+    "COMMENT": {
+      "CREATED": "Comentario creado con éxito.",
+      "UPDATED": "Comentario actualizado con éxito.",
+      "DELETED": "Comentario eliminado con éxito."
+    },
+    "TOPIC": {
+      "CREATED": "Tema creado con éxito.",
+      "DELETED": "Tema eliminado con éxito."
+    },
+    "TAGS": {
+      "UPDATED": "Etiqueta actualizada con éxito.",
+      "DELETED": "Etiqueta eliminada con éxito."
+    },
+    "LIKE": {
+      "CREATED": "Me gusta añadido con éxito.",
+      "DELETED": "Me gusta eliminado con éxito."
+    },
+    "ACCESS_SETTINGS": {
+      "UPDATED": "Configuraciones de acceso actualizadas con éxito."
+    },
+    "DATA": {
+      "UPDATED": "Tu información ha sido actualizada con éxito."
+    }
   },
   "ERROR_MESSAGES": {
-    "ACCESS_DENIED": "Acceso denegado. No has proporcionado un token. Por favor, inicia sesión.",
-    "USER_NOT_FOUND": "No se encontró el usuario. Verifica tus credenciales e intenta nuevamente.",
-    "USER_ALREADY_EXISTS": "Ya existe un usuario con este correo. Ingresa o trata con otro.",
-    "INVALID_CREDENTIALS": "Credenciales inválidas. Asegúrate de que tu información sea correcta.",
-    "REGISTER_FAILED": "No se pudo completar el registro. Por favor, intenta más tarde.",
-    "LOGIN_FAILED": "Iniciar sesión ha fallado. Revisa tu información y vuelve a intentarlo.",
-    "ACCOUNT_BLOCKED": "Tu cuenta está bloqueada. Contacta al soporte.",
-    "INVALID_TOKEN": "Token inválido. Necesitas iniciar sesión otra vez.",
-    "USER_ID_REQUIRED": "El ID del usuario es necesario. Verifica la información.",
-    "ERROR_DELETING_USERS": "No se pudo eliminar el usuario. Por favor, intenta más tarde .",
-    "ACTION_FAILED": "Ocurrió un error. Por favor, intenta de nuevo más tarde.",
-    "TEMPLATE_NOT_FOUND": "No se pudo encontrar la plantilla. Puede que haya sido eliminada.",
-    "FORM_NOT_FOUND": "No se pudo encontrar el formulario. Asegúrate de que el enlace sea correcto.",
-    "TEMPLATE_MANAGEMENT_ERROR": "No tienes permisos para gestionar esta plantilla.",
-    "FORM_MANAGEMENT_ERROR": "No tienes permisos para gestionar este formulario.",
-    "COMMENTS_FETCH_FAILED": "Hubo un error al cargar los comentarios. Intenta recargar la página.",
-    "TAGS_LOAD_FAILED": "No se pudieron cargar las etiquetas. Vuelve a intentarlo más tarde.",
-    "TEMPLATE_ACCESS_DENIED": "No tienes acceso a esta plantilla. Revisa tus permisos.",
-    "FORM_ACCESS_DENIED": "No tienes acceso a este formulario. Asegúrate de que tienes los permisos necesarios.",
-    "SERVER_ERROR": "Error interno en el servidor, por favor intente más tarde",
-    "SEARCH_FAILED": "Ha ocurrido un error en la búsqueda, por favor intente nuevamente."
+    "AUTH": {
+      "ACCESS_DENIED": "Acceso denegado. No se proporcionó token. Por favor, inicia sesión.",
+      "USER_ALREADY_EXISTS": "Ya existe un usuario con este correo electrónico. Inicia sesión o prueba con otro correo.",
+      "INVALID_CREDENTIALS": "Credenciales inválidas. Por favor, asegúrate de que tu información es correcta.",
+      "REGISTER_FAILED": "No se pudo completar el registro. Por favor, inténtalo de nuevo más tarde.",
+      "LOGIN_FAILED": "Error al iniciar sesión. Verifica tu información e inténtalo de nuevo.",
+      "ACCOUNT_BLOCKED": "Tu cuenta ha sido bloqueada. Por favor, contacta con soporte.",
+      "INVALID_TOKEN": "Token inválido. Necesitas iniciar sesión de nuevo."
+    },
+    "USER": {
+      "ID_REQUIRED": "Se requiere el ID del usuario. Por favor, verifica la información.",
+      "ERROR_DELETING": "No se pudo eliminar al usuario. Por favor, inténtalo de nuevo más tarde.",
+      "ACTION_FAILED": "Ocurrió un error. Por favor, inténtalo de nuevo más tarde.",
+      "NOT_FOUND": "Usuario no encontrado. Por favor, verifica tus credenciales e inténtalo de nuevo."
+    },
+    "TEMPLATE": {
+      "NOT_FOUND": "Plantilla no encontrada.",
+      "CREATION_ERROR": "Hubo un error al crear la plantilla. Por favor, inténtalo de nuevo más tarde.",
+      "MANAGEMENT_ERROR": "No tienes permiso para gestionar esta plantilla.",
+      "ACCESS_DENIED": "No tienes acceso a esta plantilla. Verifica tus permisos.",
+      "INVALID_QUESTION_TYPE": "Tipo de pregunta inválido proporcionado.",
+      "FILTERING_ERROR": "Hubo un error al filtrar la plantilla. Por favor, inténtalo de nuevo.",
+      "DELETING_ERROR": "Error al eliminar la plantilla, por favor inténtalo de nuevo.",
+      "UPDATE_ERROR": "Error al actualizar la plantilla, por favor inténtalo de nuevo.",
+      "QUESTIONS_LIMIT": "La plantilla debe tener entre 1 y 16 preguntas.",
+      "QUESTIONS_TYPE_LIMIT": "Se alcanzó el límite máximo para preguntas de tipo {{question.questionType}}.",
+      "NO_TAGS": "Las plantillas deben tener al menos una etiqueta."
+    },
+    "TOPIC": {
+      "NOT_FOUND": "Tema no encontrado. Por favor, asegúrate de que el enlace es correcto.",
+      "CREATION_ERROR": "Hubo un error al crear el tema. Por favor, inténtalo de nuevo más tarde.",
+      "LOAD_FAILED": "Error al cargar los temas. Por favor, inténtalo de nuevo más tarde.",
+      "DELETING_ERROR": "Error al eliminar el tema, por favor inténtalo de nuevo."
+    },
+    "FORM": {
+      "NOT_FOUND": "Formulario no encontrado. Por favor, asegúrate de que el enlace es correcto.",
+      "MANAGEMENT_ERROR": "No tienes permiso para gestionar este formulario.",
+      "ACCESS_DENIED": "No tienes acceso a este formulario. Asegúrate de tener los permisos necesarios."
+    },
+    "COMMENT": {
+      "NOT_FOUND": "Comentario no encontrado. Por favor, asegúrate de que el enlace es correcto.",
+      "LOAD_FAILED": "Error al cargar los comentarios. Por favor, inténtalo de nuevo más tarde.",
+      "CREATED": "Comentario creado con éxito."
+    },
+    "TAGS": {
+      "LOAD_FAILED": "Error al cargar las etiquetas. Por favor, inténtalo de nuevo más tarde."
+    },
+    "ADMIN": {
+      "ACCESS_REQUIRED": "Se requieren privilegios de administrador para esta acción.",
+      "NOT_FOUND": "Etiqueta no encontrada.",
+      "LOAD_FAILED": "Error al cargar las etiquetas. Por favor, inténtalo de nuevo más tarde."
+    },
+    "LIKE": {
+      "NOT_FOUND": "Me gusta no encontrado.",
+      "INVALID_TYPE": "Tipo de me gusta inválido. Debe ser 'template' o 'comment'."
+    },
+    "GENERAL": {
+      "SERVER_ERROR": "Error interno del servidor, por favor inténtalo de nuevo más tarde.",
+      "SEARCH_FAILED": "Hubo un error en la búsqueda, por favor inténtalo de nuevo.",
+      "PERMISSIONS_REQUIRED": "Solo el autor o los administradores pueden realizar esta acción."
+    },
+    "ACCESS_SETTINGS": {
+      "UPDATE_ERROR": "Error al actualizar las configuraciones de acceso, por favor inténtalo de nuevo."
+    }
   }
 }

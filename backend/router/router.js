@@ -1,5 +1,4 @@
 const express = require("express");
-const morgan = require("morgan");
 const authRouter = require("./authRouter");
 const usersRouter = require("./usersRouter");
 const topicsRouter = require("./topicsRouter");
@@ -7,6 +6,7 @@ const templatesRouter = require("./templatesRouter");
 const commentsRouter = require("./commentsRouter");
 const formsRouter = require("./formsRouter");
 const tagsRouter = require("./tagsRouter");
+const likesRouter = require("./likesRouter");
 const { API_ENDPOINTS } = require("../constants");
 require("dotenv").config();
 
@@ -19,9 +19,6 @@ router.use(API_ENDPOINTS.TEMPLATES, templatesRouter);
 router.use(API_ENDPOINTS.TAGS, tagsRouter);
 router.use(API_ENDPOINTS.FORMS, formsRouter);
 router.use(API_ENDPOINTS.COMMENTS, commentsRouter);
-
-router.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+router.use(API_ENDPOINTS.LIKES, likesRouter);
 
 module.exports = router;

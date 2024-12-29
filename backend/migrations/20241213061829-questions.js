@@ -25,13 +25,13 @@ module.exports = {
         ),
         allowNull: false,
       },
-      status: {
-        type: Sequelize.ENUM(
-          "NOT_PRESENT",
-          "PRESENT_OPTIONAL",
-          "PRESENT_REQUIRED"
-        ),
-        defaultValue: "NOT_PRESENT",
+      isVisible: {
+        type: Sequelize.ENUM("NOT_VISIBLE", "OPTIONAL", "VISIBLE"),
+        defaultValue: "NOT_VISIBLE",
+      },
+      order: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       templateId: {
         type: Sequelize.UUID,

@@ -35,13 +35,9 @@ module.exports = (sequelize) => {
         ),
         allowNull: false,
       },
-      status: {
-        type: DataTypes.ENUM(
-          "NOT_PRESENT",
-          "PRESENT_OPTIONAL",
-          "PRESENT_REQUIRED"
-        ),
-        defaultValue: "NOT_PRESENT",
+      isVisible: {
+        type: DataTypes.ENUM("NOT_VISIBLE", "OPTIONAL", "VISIBLE"),
+        defaultValue: "NOT_VISIBLE",
       },
     },
     {

@@ -18,22 +18,17 @@ router.put(
   userController.updateUserById
 );
 router.put(
-  "/admin/:id/:action",
+  "/admin/:action",
   authenticateJWT,
   isAdmin,
   userController.updateAdminStatus
 );
 router.put(
-  "/status/:id/:action",
+  "/status/:action",
   authenticateJWT,
   isAdmin,
   userController.updateBlockStatus
 );
-router.delete(
-  "/:id/delete",
-  authenticateJWT,
-  isAdmin,
-  userController.deleteUser
-);
+router.delete("/", authenticateJWT, isAdmin, userController.deleteUser);
 
 module.exports = router;

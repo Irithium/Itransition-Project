@@ -5,18 +5,15 @@ const { STATUS_CODES } = require("../constants");
 
 exports.registerUser = async (req, res) => {
   const { username, email, password } = req.body;
-  console.log(username, email, password);
 
   try {
     const existingUser = await Users.findOne({ where: { email } });
-    console.log(existingUser);
 
     if (existingUser) {
       return res.status(STATUS_CODES.BAD_REQUEST).json({
-        error: req.t("ERROR_MESSAGES.USER_ALREADY_EXISTS"),
+        error: req.t("ERROR_MESSAGES.AUTH.USER_ALREADY_EXISTS"),
       });
     }
-
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await Users.create({
       username,
@@ -42,7 +39,7 @@ exports.registerUser = async (req, res) => {
   } catch (error) {
     return res
       .status(STATUS_CODES.SERVER_ERROR)
-      .json({ message: req.t("ERROR_MESSAGES.SERVER_ERROR") });
+      .json({ message: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
   }
 };
 
@@ -54,21 +51,20 @@ exports.loginUser = async (req, res) => {
     if (!user) {
       return res
         .status(STATUS_CODES.NOT_FOUND)
-        .json({ message: req.t("ERROR_MESSAGES.USER_NOT_FOUND") });
+        .json({ message: req.t("ERROR_MESSAGES.AUTH.USER_NOT_FOUND") });
     }
 
     if (user.isBlocked) {
-      if (req.user.isBlocked) {
-        return res
-          .status(STATUS_CODES.FORBIDDEN)
-          .json({ message: req.t("ERROR_MESSAGES.ACCOUNT_BLOCKED") });
-      }
+      return res
+        .status(STATUS_CODES.FORBIDDEN)
+        .json({ message: req.t("ERROR_MESSAGES.AUTH.ACCOUNT_BLOCKED") });
     }
 
-    if (await bcrypt.compare(password, user.password)) {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       return res
         .status(STATUS_CODES.UNAUTHORIZED)
-        .json({ message: req.t("ERROR_MESSAGES.INVALID_CREDENTIALS") });
+        .json({ message: req.t("ERROR_MESSAGES.AUTH.INVALID_CREDENTIALS") });
     }
 
     await User.update({ lastActivity: new Date() }, { where: { id: user.id } });
@@ -91,6 +87,6 @@ exports.loginUser = async (req, res) => {
   } catch (error) {
     return res
       .status(STATUS_CODES.SERVER_ERROR)
-      .json({ message: req.t("ERROR_MESSAGES.SERVER_ERROR") });
+      .json({ message: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
   }
 };

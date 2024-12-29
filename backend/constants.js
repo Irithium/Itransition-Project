@@ -6,6 +6,7 @@ const API_ENDPOINTS = {
   TAGS: "/tags",
   FORMS: "/forms",
   COMMENTS: "/comments",
+  LIKES: "/likes",
 };
 
 const STATUS_CODES = {

@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      userId: {
+      authorId: {
         type: DataTypes.BIGINT,
         allowNull: false,
       },

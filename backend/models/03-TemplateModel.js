@@ -42,6 +42,10 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      accessSettings: {
+        type: Sequelize.JSON,
+        allowNull: false,
+      },
     },
     {
       sequelize,

@@ -1,41 +1,115 @@
 {
   "SUCCESS_MESSAGES": {
-    "REGISTERED": "Registration successful! ",
+    "REGISTERED": "Registration successful!",
     "LOGIN": "Welcome back!",
-    "TEMPLATE_CREATED": "Template created successfully. Start adding questions!",
-    "FORM_SUBMITTED": "Form submitted successfully. Thank you for your response!",
-    "UPDATED": "Your information has been updated successfully.",
-    "USER_UPDATED": "Data updated successfully.",
-    "ADMIN_ASSIGNED": "Admin privileges given successfully.",
-    "ADMIN_REMOVED": "Admin privileges revoked successfully.",
-    "USER_BLOCKED": "User has been blocked.",
-    "USER_UNBLOCKED": "User has been unblocked.",
-    "USER_DELETED": "Deleted successfully.",
-    "TEMPLATE_DELETED": "Template deleted successfully.",
-    "FORM_DELETED": "Form deleted successfully."
+    "TEMPLATE": {
+      "CREATED": "Template created successfully.",
+      "UPDATED": "Template updated successfully.",
+      "DELETED": "Template deleted successfully."
+    },
+    "FORM": {
+      "SUBMITTED": "Form submitted successfully. Thank you for your response!",
+      "UPDATED": "Form updated successfully.",
+      "DELETED": "Form deleted successfully."
+    },
+    "USER": {
+      "UPDATED": "User data updated successfully.",
+      "BLOCKED": "User has been blocked successfully.",
+      "UNBLOCKED": "User has been unblocked successfully.",
+      "DELETED": "User deleted successfully."
+    },
+    "ADMIN": {
+      "ASSIGNED": "Admin privileges assigned successfully.",
+      "REMOVED": "Admin privileges revoked successfully."
+    },
+    "COMMENT": {
+      "CREATED": "Comment created successfully.",
+      "UPDATED": "Comment updated successfully.",
+      "DELETED": "Comment deleted successfully."
+    },
+    "TOPIC": {
+      "CREATED": "Topic created successfully.",
+      "DELETED": "Topic deleted successfully."
+    },
+    "TAGS": {
+      "UPDATED": "Tag updated successfully.",
+      "DELETED": "Tag deleted successfully."
+    },
+    "LIKE": {
+      "CREATED": "Like added successfully.",
+      "DELETED": "Like removed successfully."
+    },
+    "ACCESS_SETTINGS": {
+      "UPDATED": "Access settings updated successfully."
+    },
+    "DATA": {
+      "UPDATED": "Your information has been updated successfully."
+    }
   },
   "ERROR_MESSAGES": {
-    "ACCESS_DENIED": "Access denied. No token provided. Please log in.",
-    "USER_NOT_FOUND": "User not found. Please verify the credentials and try again.",
-    "USER_ALREADY_EXISTS": "A user with this email already exists. Log in or try another",
-    "INVALID_CREDENTIALS": "Invalid credentials. Ensure your information is correct.",
-    "REGISTER_FAILED": "Registration could not be completed. Please try again later.",
-    "LOGIN_FAILED": "Login failed. Check your information and try again.",
-    "ACCOUNT_BLOCKED": "Your account has been blocked. Please contact support.",
-    "INVALID_TOKEN": "Invalid token. You need to log in again.",
-    "USER_ID_REQUIRED": "User  ID is required. Please verify the information.",
-    "ERROR_DELETING_USERS": "Could not delete the user. Please try again later.",
-    "ACTION_FAILED": "An error occurred. Please try again later.",
-    "TEMPLATE_NOT_FOUND": "Template not found. It might have been deleted.",
-    "FORM_NOT_FOUND": "Form not found. Please ensure the link is correct.",
-    "TEMPLATE_MANAGEMENT_ERROR": "You do not have permission to manage this template.",
-    "FORM_MANAGEMENT_ERROR": "You do not have permission to manage this form.",
-    "COMMENTS_FETCH_FAILED": "There was an error loading comments. Please try reloading the page.",
-    "TAGS_LOAD_FAILED": "Failed to load tags. Please try again later.",
-    "TEMPLATE_ACCESS_DENIED": "You do not have access to this template. Check your permissions.",
-    "ADMIN_ACCESS_REQUIRED": "Admin privileges are required for this.",
-    "FORM_ACCESS_DENIED": "You do not have access to this form. Make sure you have the necessary permissions.",
-    "SERVER_ERROR": "Internal server error, please try again later",
-    "SEARCH_FAILED": "There has been a search error, please try again."
+    "AUTH": {
+      "ACCESS_DENIED": "Access denied. No token provided. Please log in.",
+      "USER_ALREADY_EXISTS": "A user with this email already exists. Log in or try another email.",
+      "INVALID_CREDENTIALS": "Invalid credentials. Please ensure your information is correct.",
+      "REGISTER_FAILED": "Registration could not be completed. Please try again later.",
+      "LOGIN_FAILED": "Login failed. Check your information and try again.",
+      "ACCOUNT_BLOCKED": "Your account has been blocked. Please contact support.",
+      "INVALID_TOKEN": "Invalid token. You need to log in again."
+    },
+    "USER": {
+      "ID_REQUIRED": "User ID is required. Please verify the information.",
+      "ERROR_DELETING": "Could not delete the user. Please try again later.",
+      "ACTION_FAILED": "An error occurred. Please try again later.",
+      "NOT_FOUND": "User not found. Please verify your credentials and try again."
+    },
+    "TEMPLATE": {
+      "NOT_FOUND": "Template not found.",
+      "CREATION_ERROR": "There was an error creating the template. Please try again later.",
+      "MANAGEMENT_ERROR": "You do not have permission to manage this template.",
+      "ACCESS_DENIED": "You do not have access to this template. Check your permissions.",
+      "INVALID_QUESTION_TYPE": "Invalid question type provided.",
+      "FILTERING_ERROR": "There was an error filtering the template. Please try again.",
+      "DELETING_ERROR": "Error deleting template, please try again.",
+      "UPDATE_ERROR": "Error updating template, please try again.",
+      "QUESTIONS_LIMIT": "Template must have between 1 and 16 questions.",
+      "QUESTIONS_TYPE_LIMIT": "Maximum limit for {{question.questionType}} questions reached.",
+      "NO_TAGS": "Templates must have at least one tag."
+    },
+    "TOPIC": {
+      "NOT_FOUND": "Topic not found. Please ensure the link is correct.",
+      "CREATION_ERROR": "There was an error creating the topic. Please try again later.",
+      "LOAD_FAILED": "Failed to load topics. Please try again later.",
+      "DELETING_ERROR": "Error deleting topic, please try again."
+    },
+    "FORM": {
+      "NOT_FOUND": "Form not found. Please ensure the link is correct.",
+      "MANAGEMENT_ERROR": "You do not have permission to manage this form.",
+      "ACCESS_DENIED": "You do not have access to this form. Ensure you have the necessary permissions."
+    },
+    "COMMENT": {
+      "NOT_FOUND": "Comment not found. Please ensure the link is correct.",
+      "LOAD_FAILED": "Failed to load comments. Please try again later.",
+      "CREATED": "Comment created successfully."
+    },
+    "TAGS": {
+      "LOAD_FAILED": "Failed to load tags. Please try again later."
+    },
+    "ADMIN": {
+      "ACCESS_REQUIRED": "Admin privileges are required for this action.",
+      "NOT_FOUND": "Tag not found.",
+      "LOAD_FAILED": "Failed to load tags. Please try again later."
+    },
+    "LIKE": {
+      "NOT_FOUND": "Like not found.",
+      "INVALID_TYPE": "Invalid like type. Must be 'template' or 'comment'."
+    },
+    "GENERAL": {
+      "SERVER_ERROR": "Internal server error, please try again later.",
+      "SEARCH_FAILED": "There has been a search error, please try again.",
+      "PERMISSIONS_REQUIRED": "Only the author or admins can perform this action."
+    },
+    "ACCESS_SETTINGS": {
+      "UPDATE_ERROR": "Error updating access settings, please try again."
+    }
   }
 }

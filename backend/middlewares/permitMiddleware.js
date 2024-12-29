@@ -6,7 +6,7 @@ const checkPermissions = (model) => {
     const userId = req.user.id;
     const objectId = req.params.id;
 
-    models = [Users, Comments, Templates, Forms];
+    const models = [Users, Comments, Templates, Forms];
 
     try {
       const user = await Users.findByPk(userId);

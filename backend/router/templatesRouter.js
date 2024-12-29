@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { authenticateJWT } = require("../middlewares/authMiddleware");
 const { checkPermissions } = require("../middlewares/permitMiddleware");
 const templateController = require("../controllers/templateController");
+const { Templates } = require("../models");
 
 router.post("/", authenticateJWT, templateController.createTemplate);
 router.get("/", authenticateJWT, templateController.getAllTemplates);

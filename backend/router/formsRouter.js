@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { authenticateJWT } = require("../middlewares/authMiddleware");
 const { checkPermissions } = require("../middlewares/permitMiddleware");
 const formsController = require("../controllers/formsController");
+const { Forms } = require("../models");
 
 router.post("/", authenticateJWT, formsController.createForm);
 router.get(

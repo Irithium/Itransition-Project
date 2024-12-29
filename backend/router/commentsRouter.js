@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { authenticateJWT } = require("../middlewares/authMiddleware");
 const { checkPermissions } = require("../middlewares/permitMiddleware");
 const commentsController = require("../controllers/commentsController");
+const { Comments } = require("../models");
 
 router.post("/", authenticateJWT, commentsController.createComment);
 router.get(

@@ -5,15 +5,15 @@ const templateController = require("../controllers/templateController");
 const { Templates } = require("../models");
 
 router.post("/", authenticateJWT, templateController.createTemplate);
-router.get("/", authenticateJWT, templateController.getAllTemplates);
+router.get("/", templateController.getTemplates);
 router.get(
   "/user/:authorId",
   authenticateJWT,
   templateController.getUserTemplates
 );
-router.get("/filter", authenticateJWT, templateController.getFilteredTemplates);
-router.get("/search", authenticateJWT, templateController.searchTemplates);
-router.get("/:id", authenticateJWT, templateController.getTemplateById);
+router.get("/filter", templateController.getFilteredTemplates);
+router.get("/search", templateController.searchTemplates);
+router.get("/:id", templateController.getTemplateById);
 router.put(
   "/:id/update",
   authenticateJWT,

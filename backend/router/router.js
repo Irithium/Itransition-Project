@@ -7,6 +7,7 @@ const commentsRouter = require("./commentsRouter");
 const formsRouter = require("./formsRouter");
 const tagsRouter = require("./tagsRouter");
 const likesRouter = require("./likesRouter");
+const uploadRouter = require("./uploadRouter");
 const { API_ENDPOINTS } = require("../constants");
 require("dotenv").config();
 
@@ -20,5 +21,6 @@ router.use(API_ENDPOINTS.TAGS, tagsRouter);
 router.use(API_ENDPOINTS.FORMS, formsRouter);
 router.use(API_ENDPOINTS.COMMENTS, commentsRouter);
 router.use(API_ENDPOINTS.LIKES, likesRouter);
+router.use(API_ENDPOINTS.UPLOAD, uploadRouter);
 
 module.exports = router;

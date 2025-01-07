@@ -7,6 +7,7 @@ const API_ENDPOINTS = {
   FORMS: "/forms",
   COMMENTS: "/comments",
   LIKES: "/likes",
+  UPLOAD: "/upload",
 };
 
 const STATUS_CODES = {

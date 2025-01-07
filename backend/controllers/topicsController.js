@@ -1,18 +1,21 @@
 const { Topics } = require("../models");
 const { STATUS_CODES } = require("../constants");
 
-exports.createTopic = async (req, res) => {
-  const { name, description } = req.body;
+const convertToUpperUnderscore = (str) =>
+  str.toUpperCase().replace(/\s+/g, "_");
 
+exports.createTopic = async (req, res) => {
+  const topics = req.body;
   try {
-    const newTopic = await Topics.create({
-      name,
-      description,
+    const newTopics = await topics.map(async (topic) => {
+      await Topics.create({
+        title: topic.name,
+      });
     });
 
     res.status(STATUS_CODES.CREATED).json({
       message: req.t("SUCCESS_MESSAGES.TOPIC.CREATED"),
-      topic: newTopic,
+      topics: newTopics,
     });
   } catch (error) {
     res
@@ -24,10 +27,19 @@ exports.createTopic = async (req, res) => {
 exports.getTopics = async (req, res) => {
   try {
     const topics = await Topics.findAll({
-      attributes: ["id", "name"],
+      attributes: ["id", "title"],
     });
 
-    res.status(STATUS_CODES.SUCCESS).json(topics);
+    const formattedTopics = topics.map((topic) => {
+      topic.title = convertToUpperUnderscore(topic.title);
+
+      return {
+        id: topic.id,
+        title: req.t(`TOPICS.${topic.title}`),
+      };
+    });
+
+    res.status(STATUS_CODES.SUCCESS).json(formattedTopics);
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)

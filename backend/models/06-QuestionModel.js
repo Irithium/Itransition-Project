@@ -26,6 +26,11 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
+      order: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
       questionType: {
         type: DataTypes.ENUM(
           "single-line",
@@ -38,6 +43,10 @@ module.exports = (sequelize) => {
       isVisible: {
         type: DataTypes.ENUM("NOT_VISIBLE", "OPTIONAL", "VISIBLE"),
         defaultValue: "NOT_VISIBLE",
+      },
+      isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
     },
     {

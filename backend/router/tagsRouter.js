@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { authenticateJWT, isAdmin } = require("../middlewares/authMiddleware");
 const tagsController = require("../controllers/tagsController");
 
+router.post("/", tagsController.createTags);
 router.get("/", tagsController.getTags);
 router.get("/:tagId/templates", tagsController.getTemplatesByTag);
 router.put("/:id", authenticateJWT, isAdmin, tagsController.updateTag);

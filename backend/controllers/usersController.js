@@ -6,6 +6,7 @@ const { findUsersById, findUserById } = require("../utils/findUser");
 
 exports.getCurrentUser = async (req, res) => {
   try {
+    console.log(req.user.id);
     const user = await findUserById(req.user.id, req, res);
 
     const newUser = {

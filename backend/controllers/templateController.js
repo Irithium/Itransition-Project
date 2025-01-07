@@ -31,49 +31,11 @@ exports.createTemplate = async (req, res) => {
         .json({ error: req.t("ERROR_MESSAGES.TOPIC.NOT_FOUND") });
     }
 
-    if (questions.length > 16 || questions.length < 1) {
-      return res
-        .status(STATUS_CODES.BAD_REQUEST)
-        .json({ error: req.t("ERROR_MESSAGES.TEMPLATE.QUESTIONS_LIMIT") });
-    }
-
-    const limitTypes = {
-      "single-line": 4,
-      "multiple-line": 4,
-      integer: 4,
-      checkbox: 4,
-    };
-    const questionTypeCounts = {
-      "single-line": 0,
-      "multiple-line": 0,
-      integer: 0,
-      checkbox: 0,
-    };
-
-    for (const question of questions) {
-      if (!limitTypes[question.questionType]) {
-        return res.status(STATUS_CODES.BAD_REQUEST).json({
-          error: req.t("ERROR_MESSAGES.TEMPLATE.INVALID_QUESTION_TYPE"),
-        });
-      }
-      questionTypeCounts[question.questionType]++;
-      if (
-        questionTypeCounts[question.questionType] >
-        limitTypes[question.questionType]
-      ) {
-        return res.status(STATUS_CODES.BAD_REQUEST).json({
-          error: req.t("ERROR_MESSAGES.TEMPLATE.QUESTIONS_TYPE_LIMIT", {
-            questionType: question.questionType,
-          }),
-        });
-      }
-    }
-
     const newTemplate = await Templates.create({
       title,
       description,
       topicId,
-      imageUrl,
+      image_url: imageUrl,
       authorId: req.user.id,
       accessSettings,
     });
@@ -126,21 +88,8 @@ exports.updateTemplate = async (req, res) => {
       title,
       description,
       topicId,
-      imageUrl,
+      image_url: imageUrl,
     });
-
-    if (questions.length > 16 || questions.length < 1) {
-      return res
-        .status(STATUS_CODES.BAD_REQUEST)
-        .json({ error: req.t("ERROR_MESSAGES.TEMPLATE.QUESTIONS_LIMIT") });
-    }
-
-    const limitTypes = {
-      "single-line": 4,
-      "multiple-line": 4,
-      integer: 4,
-      checkbox: 4,
-    };
 
     const currentQuestions = await Questions.findAll({
       where: { templateId: id },
@@ -148,35 +97,24 @@ exports.updateTemplate = async (req, res) => {
 
     const questionsToKeep = [];
     for (const question of currentQuestions) {
-      const newQuestion = questions.find((q) => q.id === question.id);
-      if (!newQuestion) {
-        await question.destroy();
+      const updatedQuestion = questions.find((q) => q.id === question.id);
+      if (updatedQuestion) {
+        await question.update(updatedQuestion);
+        questionsToKeep.push(question.id);
       } else {
-        questionsToKeep.push(newQuestion);
+        await question.update({ isDeleted: true });
       }
     }
 
     for (const question of questions) {
       if (!questionsToKeep.some((q) => q.id === question.id)) {
-        if (
-          questionsToKeep.filter(
-            (q) => q.questionType === question.questionType
-          ).length < limitTypes[question.questionType]
-        ) {
-          await Questions.create({
-            title: question.title,
-            description: question.description,
-            questionType: question.questionType,
-            isVisible: question.isVisible,
-            templateId: id,
-          });
-        } else {
-          return res.status(STATUS_CODES.BAD_REQUEST).json({
-            error: req.t("ERROR_MESSAGES.TEMPLATE.QUESTIONS_TYPE_LIMIT", {
-              questionType: question.questionType,
-            }),
-          });
-        }
+        await Questions.create({
+          title: question.title,
+          description: question.description,
+          questionType: question.questionType,
+          isVisible: question.isVisible,
+          templateId: id,
+        });
       }
     }
 
@@ -192,7 +130,6 @@ exports.updateTemplate = async (req, res) => {
 
 exports.deleteTemplate = async (req, res) => {
   const { id } = req.params;
-  const userId = req.user.id;
 
   try {
     const template = await Templates.findByPk(id);
@@ -214,7 +151,7 @@ exports.deleteTemplate = async (req, res) => {
   }
 };
 
-exports.getAllTemplates = async (req, res) => {
+exports.getTemplates = async (req, res) => {
   const { orderBy = "title", order = "asc", page = 1, limit = 10 } = req.query;
   const offset = (page - 1) * limit;
 

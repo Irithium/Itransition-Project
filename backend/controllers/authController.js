@@ -51,23 +51,23 @@ exports.loginUser = async (req, res) => {
     if (!user) {
       return res
         .status(STATUS_CODES.NOT_FOUND)
-        .json({ message: req.t("ERROR_MESSAGES.AUTH.USER_NOT_FOUND") });
+        .json({ error: req.t("ERROR_MESSAGES.AUTH.USER_NOT_FOUND") });
     }
 
     if (user.isBlocked) {
       return res
         .status(STATUS_CODES.FORBIDDEN)
-        .json({ message: req.t("ERROR_MESSAGES.AUTH.ACCOUNT_BLOCKED") });
+        .json({ error: req.t("ERROR_MESSAGES.AUTH.ACCOUNT_BLOCKED") });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res
         .status(STATUS_CODES.UNAUTHORIZED)
-        .json({ message: req.t("ERROR_MESSAGES.AUTH.INVALID_CREDENTIALS") });
+        .json({ error: req.t("ERROR_MESSAGES.AUTH.INVALID_CREDENTIALS") });
     }
 
-    await Users.update({ createdAt: new Date() }, { where: { id: user.id } });
+    await Users.update({ updatedAt: new Date() }, { where: { id: user.id } });
 
     const token = jwt.sign(
       { id: user.id, isAdmin: user.isAdmin },

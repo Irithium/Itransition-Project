@@ -110,6 +110,32 @@
     },
     "ACCESS_SETTINGS": {
       "UPDATE_ERROR": "Error updating access settings, please try again."
+    },
+    "IMAGES": {
+      "UPLOAD": "Error uploading image. Please try again.",
+      "NO_FILE": "No file uploaded. Please select a file to upload."
     }
+  },
+  "TOPICS": {
+    "EDUCATION": "Education",
+    "QUIZZES": "Quizzes",
+    "SURVEYS": "Surveys",
+    "FEEDBACK": "Feedback",
+    "JOB_APPLICATIONS": "Job Applications",
+    "HEALTH": "Health",
+    "PRODUCT_REVIEWS": "Product Reviews",
+    "EVENT_PLANNING": "Event Planning",
+    "CUSTOMER_SATISFACTION": "Customer Satisfaction",
+    "MARKET_RESEARCH": "Market Research",
+    "TRAINING_AND_DEVELOPMENT": "Training and Development",
+    "POLLS": "Polls",
+    "PERSONAL_DEVELOPMENT": "Personal Development",
+    "COMMUNITY_ENGAGEMENT": "Community Engagement",
+    "COMPANY_CULTURE": "Company Culture",
+    "WORKSHOPS": "Workshops",
+    "TEAM_BUILDING": "Team Building",
+    "PRODUCT_LAUNCH": "Product Launch",
+    "BUSINESS_STRATEGY": "Business Strategy",
+    "OTHER": "Other"
   }
 }

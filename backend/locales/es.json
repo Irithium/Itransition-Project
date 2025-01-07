@@ -110,6 +110,32 @@
     },
     "ACCESS_SETTINGS": {
       "UPDATE_ERROR": "Error al actualizar las configuraciones de acceso, por favor inténtalo de nuevo."
+    },
+    "IMAGES": {
+      "UPLOAD": "Error al subir la imagen. Por favor, inténtalo de nuevo.",
+      "NO_FILE": "No se ha subido ningún archivo. Por favor, selecciona un archivo para subir."
     }
+  },
+  "TOPICS": {
+    "EDUCATION": "Educación",
+    "QUIZZES": "Cuestionarios",
+    "SURVEYS": "Encuestas",
+    "FEEDBACK": "Retroalimentación",
+    "JOB_APPLICATIONS": "Solicitudes de Empleo",
+    "HEALTH": "Salud",
+    "PRODUCT_REVIEWS": "Reseñas de Productos",
+    "EVENT_PLANNING": "Planificación de Eventos",
+    "CUSTOMER_SATISFACTION": "Satisfacción del Cliente",
+    "MARKET_RESEARCH": "Investigación de Mercados",
+    "TRAINING_AND_DEVELOPMENT": "Capacitación y Desarrollo",
+    "POLLS": "Sondeos",
+    "PERSONAL_DEVELOPMENT": "Desarrollo Personal",
+    "COMMUNITY_ENGAGEMENT": "Compromiso Comunitario",
+    "COMPANY_CULTURE": "Cultura Empresarial",
+    "WORKSHOPS": "Talleres",
+    "TEAM_BUILDING": "Construcción de Equipos",
+    "PRODUCT_LAUNCH": "Lanzamiento de Productos",
+    "BUSINESS_STRATEGY": "Estrategia Empresarial",
+    "OTHER": "Otro"
   }
 }

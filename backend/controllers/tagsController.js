@@ -2,6 +2,24 @@ const { Tags, Templates, Topics, TemplateLikes, Users } = require("../models");
 const { STATUS_CODES } = require("../constants");
 const { formatLastActivity } = require("../utils/dateFormatter");
 
+exports.createTags = async (req, res) => {
+  const tags = req.body;
+
+  try {
+    const newTags = await tags.map(async (tag) => {
+      await Tags.create({ title: tag.name });
+    });
+
+    res.status(STATUS_CODES.CREATED).json({
+      tags: newTags,
+    });
+  } catch (error) {
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: req.t("ERROR_MESSAGES.TAGS.LOAD_FAILED") });
+  }
+};
+
 exports.getTags = async (req, res) => {
   try {
     const tags = await Tags.findAll({

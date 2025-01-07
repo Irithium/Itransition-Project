@@ -58,7 +58,7 @@ exports.getFormsByTemplate = async (req, res) => {
         { model: Users, attributes: ["username"] },
         {
           model: Questions,
-          attributes: ["title", "description", "questionType"],
+          attributes: ["title", "description", "questionType", "isDeleted"],
         },
       ],
       order: [["createdAt", "ASC"]],
@@ -68,15 +68,16 @@ exports.getFormsByTemplate = async (req, res) => {
       id: form.id,
       content: form.content,
       authorId: form.authorId,
-      username: form.User.username,
+      username: form.Users.username,
       templateId: form.templateId,
       questionId: form.questionId,
       createdAt: formatLastActivity(form.createdAt),
       updatedAt: formatLastActivity(form.updatedAt),
       question: {
-        title: form.Question.title,
-        description: form.Question.description,
-        questionType: form.Question.questionType,
+        title: form.Questions.title,
+        description: form.Questions.description,
+        questionType: form.Questions.questionType,
+        isDeleted: form.Questions.isDeleted,
       },
     }));
 
@@ -100,7 +101,7 @@ exports.getFormsByUser = async (req, res) => {
         { model: Templates, attributes: ["title", "description"] },
         {
           model: Questions,
-          attributes: ["title", "description", "questionType"],
+          attributes: ["title", "description", "questionType", "isDeleted"],
         },
       ],
       order: [["createdAt", "ASC"]],
@@ -115,13 +116,14 @@ exports.getFormsByUser = async (req, res) => {
       createdAt: formatLastActivity(form.createdAt),
       updatedAt: formatLastActivity(form.updatedAt),
       template: {
-        title: form.Template.title,
-        description: form.Template.description,
+        title: form.Templates.title,
+        description: form.Templates.description,
       },
       question: {
-        title: form.Question.title,
-        description: form.Question.description,
-        questionType: form.Question.questionType,
+        title: form.Questions.title,
+        description: form.Questions.description,
+        questionType: form.Questions.questionType,
+        isDeleted: form.Questions.isDeleted,
       },
     }));
 

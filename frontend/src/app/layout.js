@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import "./globals.css";
 import ToasterProvider from "@/providers/ToastProvider";
+import Navbar from "@/components/Navbar";
 
 export const metadata = {
   title: "SurveyCraft",
@@ -18,6 +19,7 @@ export default async function RootLayout({ children }) {
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ToasterProvider />
+          <Navbar />
           {children}
         </NextIntlClientProvider>
       </body>

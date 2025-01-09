@@ -35,3 +35,13 @@ export const deleteUser = async (id) => {
     return error.response.data.error;
   }
 };
+
+export const searchUsers = async (query) => {
+  try {
+    const response = await api.get(`/users/search?query=${query}`);
+
+    return response.data.users;
+  } catch (error) {
+    return error.response.data.error;
+  }
+};

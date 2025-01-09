@@ -11,7 +11,7 @@ exports.createComment = async (req, res) => {
     const newComment = await Comments.create({
       content,
       templateId,
-      userId: req.user.id,
+      authorId: req.user.id,
     });
 
     res.status(STATUS_CODES.CREATED).json({
@@ -32,7 +32,7 @@ exports.getCommentsByUser = async (req, res) => {
     await findUserById(userId);
 
     const comments = await Comments.findAll({
-      where: { userId },
+      where: { authorId: userId },
       include: [
         {
           model: CommentLikes,

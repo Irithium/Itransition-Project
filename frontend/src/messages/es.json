@@ -30,6 +30,8 @@
   "Templates": {
     "addQuestion": "Agregar Pregunta",
     "deleteQuestion": "Borrar Pregunta",
+    "addOption": "Agregar Opción",
+    "deleteOption": "Borrar Opción",
     "cancel": "Cancelar",
     "create": "Crear",
     "copy": "Copiar",
@@ -45,20 +47,35 @@
     "loading": "Cargando",
     "noData": "No hay datos",
     "noResults": "No hay resultados",
-    "option1": "Opción 1",
-    "questionDescription": "Descripción de la Pregunta",
-    "questionTitle": "Título de la Pregunta",
+    "option": "Opción",
     "questionType": "Tipo de Pregunta",
     "tags": "Etiquetas",
     "topic": "Tema",
     "noTopics": "Sin temas",
     "title": "Título",
+    "preview": "Previsualización",
+    "display": "Mostrar",
+    "selectTopic": "Seleccionar Tema",
     "description": "Descripción",
     "multipleLine": "Párrafo",
     "singleLine": "Respuesta Corta",
     "integer": "Número",
+    "public": "Público",
+    "private": "Privado",
+    "allowedUsers": "Usuarios autorizados",
+    "uploadingImage": "Subiendo Imagen",
     "uploadImage": "Subir Imagen",
+    "imageUploaded": "Imagen subida",
+    "imageUploadFailed": "Subida de imagen ha fallado, por favor intente de nuevo",
     "checkbox": "Casilla de Verificación",
-    "confirmDelete": "¿Estás seguro de que deseas eliminar esta plantilla?"
+    "confirmDelete": "¿Estás seguro de que deseas eliminar esta plantilla?",
+    "shortResponse": "Texto de respuesta breve",
+    "longResponse": "Texto de respuesta largo"
+  },
+  "Navbar": {
+    "search": "Buscar",
+    "createTemplate": "Crear Plantilla",
+    "login": "Iniciar sesión",
+    "register": "Registrar"
   }
 }

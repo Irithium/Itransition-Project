@@ -10,6 +10,7 @@ const useUserStore = create((set) => ({
   clearUser: () => set({ user: null, token: null, isAuthenticated: false }),
 
   updateUser: (user) => set({ user }),
+  setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
 }));
 
 export default useUserStore;

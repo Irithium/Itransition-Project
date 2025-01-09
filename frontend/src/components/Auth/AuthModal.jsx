@@ -25,7 +25,7 @@ const AuthModal = ({ open, onClose, title, children, type }) => {
       >
         <DialogTitle className="xl:text-2xl font-bold">{title}</DialogTitle>
         {children}
-        <DialogActions className="flex flex-row justify-center">
+        <DialogActions className="flex flex-row justify-center gap-2 w-fit mx-auto">
           <Button onClick={onClose} variant="text" color="secondary">
             {t("close")}
           </Button>

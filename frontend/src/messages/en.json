@@ -29,6 +29,8 @@
   },
   "Templates": {
     "addQuestion": "Add Question",
+    "addOption": "Add Option",
+    "deleteOption": "Delete Option",
     "deleteQuestion": "Delete Question",
     "cancel": "Cancel",
     "copy": "Copy",
@@ -45,7 +47,7 @@
     "loading": "Loading",
     "noData": "No data",
     "noResults": "No results",
-    "option1": "Option 1",
+    "option": "Option",
     "questionDescription": "Question Description",
     "questionTitle": "Question Title",
     "questionType": "Question Type",
@@ -53,12 +55,29 @@
     "topic": "Topic",
     "noTopics": "No topics",
     "title": "Title",
+    "preview": "Preview",
+    "display": "Display",
+    "selectTopic": "Select Topic",
     "description": "Description",
     "multipleLine": "Paragraph",
     "singleLine": "Short Answer",
     "integer": "Number",
+    "public": "Public",
+    "private": "Private",
+    "allowedUsers": "Allowed Users",
+    "uploadingImage": "Uploading Image",
     "uploadImage": "Upload Image",
+    "imageUploaded": "Image Uploaded",
+    "imageUploadFailed": "Image upload failed, please try again.",
     "checkbox": "Checkbox",
-    "confirmDelete": "Are you sure you want to delete this template?"
+    "confirmDelete": "Are you sure you want to delete this template?",
+    "shortResponse": "Short response text",
+    "longResponse": "Long response text"
+  },
+  "Navbar": {
+    "search": "Search",
+    "createTemplate": "Create Template",
+    "login": "Login",
+    "register": "Register"
   }
 }

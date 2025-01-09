@@ -3,7 +3,7 @@ import { setUserLocale } from "@/services/locale";
 import { useTranslations } from "next-intl";
 import useAuthModal from "@/hooks/useAuthModal";
 import useAuth from "@/hooks/useAuth";
-import AuthModal from "@/components/auth/AuthModal";
+import AuthModal from "@/components/Auth/AuthModal";
 import Form from "@/components/Auth/Form";
 import { useTransition } from "react";
 import Button from "@mui/material/Button";

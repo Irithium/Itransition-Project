@@ -4,6 +4,7 @@ const { STATUS_CODES } = require("../constants");
 exports.uploadImage = async (req, res) => {
   try {
     const file = req.file;
+    console.log(file);
     if (!file) {
       return res
         .status(STATUS_CODES.BAD_REQUEST)
@@ -14,15 +15,12 @@ exports.uploadImage = async (req, res) => {
       resource_type: "image",
     });
 
-    console.log(uploadResponse, "SOY UPLOADRESPONSE");
-
     const optimizedUrl = cloudinary.url(uploadResponse.public_id, {
       fetch_format: "auto",
       quality: "auto",
     });
-    console.log(optimizedUrl, "SOY OPTIMIZEDURL");
 
-    res.status(STATUS_CODES.SUCCESS).json({ url: optimizedUrl });
+    res.status(STATUS_CODES.SUCCESS).send({ url: optimizedUrl });
   } catch (error) {
     console.error(error);
     res

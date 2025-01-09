@@ -54,7 +54,6 @@ const Form = ({ type }) => {
       }
     },
   });
-  console.log(formik.values);
 
   return (
     <form
@@ -74,7 +73,7 @@ const Form = ({ type }) => {
       >
         {type === "login" ? t("login") : t("register")}
       </Button>
-      {error && <div>{error}</div>}
+      {error && <div className="text-red-400 text-sm text-center">{error}</div>}
     </form>
   );
 };

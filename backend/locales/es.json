@@ -114,6 +114,9 @@
     "IMAGES": {
       "UPLOAD": "Error al subir la imagen. Por favor, inténtalo de nuevo.",
       "NO_FILE": "No se ha subido ningún archivo. Por favor, selecciona un archivo para subir."
+    },
+    "OPTION": {
+      "NOT_FOUND": "No se han encontrado opciones en la pregunta."
     }
   },
   "TOPICS": {

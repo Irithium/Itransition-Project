@@ -230,34 +230,33 @@ exports.updateBlockStatus = async (req, res) => {
 };
 
 exports.searchUsers = async (req, res) => {
-  const { query, page = 1, limit = 10 } = req.query;
-  const offset = (page - 1) * limit;
+  const { query } = req.query;
 
   try {
     const users = await Users.findAndCountAll({
       where: {
         [Op.or]: [
-          { username: { [Op.iLike]: `%${query}%` } },
-          { email: { [Op.iLike]: `%${query}%` } },
+          {
+            username: {
+              [Op.like]: `%${query}%`,
+            },
+          },
+          {
+            email: {
+              [Op.like]: `%${query}%`,
+            },
+          },
         ],
       },
-      limit: parseInt(limit),
-      offset: parseInt(offset),
+      attributes: ["id", "username", "email"],
     });
-
-    const usersData = users.rows.map((user) => ({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-    }));
 
     res.status(STATUS_CODES.SUCCESS).json({
       total: users.count,
-      page: parseInt(page),
-      limit: parseInt(limit),
-      users: usersData,
+      users: users.rows,
     });
   } catch (error) {
+    console.log(error);
     return res
       .status(STATUS_CODES.SERVER_ERROR)
       .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });

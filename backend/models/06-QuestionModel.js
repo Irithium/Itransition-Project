@@ -5,6 +5,10 @@ module.exports = (sequelize) => {
     static associate(models) {
       Questions.belongsTo(models.Templates, { foreignKey: "templateId" });
       Questions.hasMany(models.Forms, { foreignKey: "questionId" });
+      Questions.hasMany(models.Options, {
+        foreignKey: "questionId",
+        as: "options",
+      });
     }
   }
 
@@ -45,6 +49,10 @@ module.exports = (sequelize) => {
         defaultValue: "NOT_VISIBLE",
       },
       isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      isRequired: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },

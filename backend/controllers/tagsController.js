@@ -23,7 +23,7 @@ exports.createTags = async (req, res) => {
 exports.getTags = async (req, res) => {
   try {
     const tags = await Tags.findAll({
-      attributes: ["id", "name"],
+      attributes: ["id", "title"],
     });
 
     res.status(STATUS_CODES.SUCCESS).json(tags);

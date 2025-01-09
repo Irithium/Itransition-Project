@@ -12,10 +12,14 @@ const useTagTopicStore = create((set) => ({
   setLoading: (loading) => set({ loading }),
 }));
 
+const sortedArr = (arr) => arr.sort((a, b) => a.id - b.id);
+
 export const loadTagTopics = async (setTopics, setTags, setLoading) => {
   setLoading(true);
   try {
     const [topics, tags] = await Promise.all([getTopics(), getTags()]);
+    sortedArr(topics);
+    sortedArr(tags);
     setTopics(topics);
     setTags(tags);
   } catch (error) {

@@ -4,7 +4,10 @@ module.exports = (sequelize) => {
   class TemplateLikes extends Model {
     static associate(models) {
       TemplateLikes.belongsTo(models.Users, { foreignKey: "userId" });
-      TemplateLikes.belongsTo(models.Templates, { foreignKey: "templateId" });
+      TemplateLikes.belongsTo(models.Templates, {
+        as: "template",
+        foreignKey: "templateId",
+      });
     }
   }
 

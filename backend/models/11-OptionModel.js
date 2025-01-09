@@ -1,34 +1,37 @@
 const { Model, DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  class Tags extends Model {
+  class Options extends Model {
     static associate(models) {
-      Tags.belongsToMany(models.Templates, {
-        through: models.TemplateTags,
-        foreignKey: "tagId",
-      });
+      Options.belongsTo(models.Questions, { foreignKey: "questionId" });
     }
   }
 
-  Tags.init(
+  Options.init(
     {
       id: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
         autoIncrement: true,
+        primaryKey: true,
       },
       title: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+      },
+      value: {
+        type: DataTypes.STRING,
+      },
+      questionId: {
+        type: DataTypes.UUID,
+        allowNull: false,
       },
     },
     {
       sequelize,
-      modelName: "Tags",
+      modelName: "Options",
       timestamps: true,
     }
   );
 
-  return Tags;
+  return Options;
 };

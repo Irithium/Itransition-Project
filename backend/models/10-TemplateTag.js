@@ -29,7 +29,7 @@ module.exports = (sequelize) => {
     {
       sequelize,
       modelName: "TemplateTags",
-      timestamps: false,
+      timestamps: true,
     }
   );
 

@@ -114,6 +114,9 @@
     "IMAGES": {
       "UPLOAD": "Error uploading image. Please try again.",
       "NO_FILE": "No file uploaded. Please select a file to upload."
+    },
+    "OPTION": {
+      "NOT_FOUND": "No options were found in the question."
     }
   },
   "TOPICS": {

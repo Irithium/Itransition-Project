@@ -47,7 +47,7 @@ const CreateTemplate = () => {
     if (!topics.length || !tags.length) {
       loadTagTopics(setTopics, setTags, setLoading);
     }
-  }, [setTopics, setTags, setLoading]);
+  }, [setTopics, setTags, setLoading, topics.length, tags.length]);
 
   const formik = useFormik({
     initialValues: {
@@ -222,8 +222,8 @@ const CreateTemplate = () => {
         onSubmit={formik.handleSubmit}
         className="flex flex-col w-full md:w-1/2 mx-auto gap-4 mt-6 relative pb-10"
       >
-        <div className="relative flex justify-center rounded-md bg-slate-100 shadow-md items-center  overflow-hidden  ">
-          {formik.values.imageUrl !== "" && (
+        {formik.values.imageUrl !== "" && (
+          <div className="relative flex justify-center rounded-md bg-slate-100 shadow-md items-center  overflow-hidden  ">
             <Image
               src={formik.values?.imageUrl}
               width={300}
@@ -231,14 +231,15 @@ const CreateTemplate = () => {
               className="w-full h-full rounded-md "
               alt="Image"
             />
-          )}
-          <IconButton
-            onClick={() => handleDeleteImage()}
-            className="absolute top-4 text-black right-0 transform -translate-x-1/2 bg-white py-2"
-          >
-            <Clear />
-          </IconButton>
-        </div>
+
+            <IconButton
+              onClick={() => handleDeleteImage()}
+              className={`absolute top-4 text-black right-0 transform -translate-x-1/2 bg-white py-2 `}
+            >
+              <Clear />
+            </IconButton>
+          </div>
+        )}
 
         <div className="border-t-4 rounded-md border-[#DA6C70] bg-slate-100 px-6 py-4 shadow-md h-auto">
           <TextField
@@ -270,11 +271,14 @@ const CreateTemplate = () => {
           <div className="mt-2">
             <h3 className="text-sm font-semibold">{t("preview")}:</h3>
             <div className="p-2 border rounded-md bg-white max-w-full  break-words">
-              <ReactMarkdown
-                children={formik.values.description}
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeRaw]}
-              />
+              {typeof window !== "undefined" && (
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
+                >
+                  {formik.values.description}
+                </ReactMarkdown>
+              )}
             </div>
           </div>
         </div>

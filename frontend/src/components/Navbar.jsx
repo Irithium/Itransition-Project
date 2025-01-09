@@ -26,7 +26,7 @@ import AuthModal from "./Auth/AuthModal";
 import { Form } from "formik";
 import useUserStore from "@/stores/userStore";
 import Cookies from "js-cookie";
-import { setUserLocale } from "@/services/locale";
+import { setUserLocale, getUserLocale } from "@/services/locale";
 
 const Navbar = () => {
   const router = useRouter();
@@ -40,22 +40,24 @@ const Navbar = () => {
     closeRegisterModal,
   } = useAuthModal();
   const { logout } = useAuth();
-  const [language, setLanguage] = useState(Cookies.get("i18next"));
-
+  const [language, setLanguage] = useState("en");
   const { isAuthenticated, setIsAuthenticated } = useUserStore();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
-  }, []);
 
-  const changeLanguage = (locale) => {
-    if (typeof locale !== "string") {
-      throw new Error("El valor debe ser una cadena");
-    }
-    startTransition(() => {
-      setUserLocale(locale);
-    });
+    const fetchLocale = async () => {
+      const userLocale = await getUserLocale();
+      setLanguage(userLocale);
+    };
+
+    fetchLocale();
+  }, [setIsAuthenticated]);
+
+  const changeLanguage = async (locale) => {
+    await setUserLocale(locale);
+
     setLanguage(locale);
   };
 
@@ -117,7 +119,7 @@ const Navbar = () => {
                 <IconButton
                   color="primary"
                   onClick={() => router.push("/templates/new")}
-                  className="md:hidden "
+                  className="md:hidden"
                 >
                   <AddIcon />
                 </IconButton>

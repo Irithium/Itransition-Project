@@ -21,7 +21,7 @@ import { useTranslations } from "next-intl";
 import useAuthModal from "@/hooks/useAuthModal";
 import useAuth from "@/hooks/useAuth";
 import Image from "next/image";
-import logo from "@/assets/Icon.jpg";
+import logo from "/public/logo.jpg";
 import AuthModal from "./Auth/AuthModal";
 import { Form } from "formik";
 import useUserStore from "@/stores/userStore";

@@ -21,7 +21,7 @@ import { useTranslations } from "next-intl";
 import useAuthModal from "@/hooks/useAuthModal";
 import useAuth from "@/hooks/useAuth";
 import Image from "next/image";
-import logo from "@/assets/icon.jpg";
+import logo from "@/assets/Icon.jpg";
 import AuthModal from "./Auth/AuthModal";
 import { Form } from "formik";
 import useUserStore from "@/stores/userStore";
@@ -97,7 +97,7 @@ const Navbar = () => {
             <InputBase
               placeholder={t("search")}
               inputProps={{ "aria-label": "search" }}
-              onKeyPress={handleSearch}
+              onKeyDown={handleSearch}
               className="w-full bg-white rounded px-2 py-1"
             />
           </div>

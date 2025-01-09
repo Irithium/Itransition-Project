@@ -241,38 +241,6 @@ exports.getTemplates = async (req, res) => {
 
   try {
     const templates = await Templates.findAll({
-      attributes: [
-        "id",
-        "title",
-        "description",
-        "image_url",
-        "authorId",
-        "topicId",
-        "accessSettings",
-        "createdAt",
-        "updatedAt",
-        [
-          sequelize.fn(
-            "COUNT",
-            sequelize.fn("DISTINCT", sequelize.col("TemplateLikes.id"))
-          ),
-          "likes",
-        ],
-        [
-          sequelize.fn(
-            "COUNT",
-            sequelize.fn("DISTINCT", sequelize.col("Forms.id"))
-          ),
-          "responses",
-        ],
-        [
-          sequelize.fn(
-            "GROUP_CONCAT",
-            sequelize.fn("DISTINCT", sequelize.col("Tags.id"))
-          ),
-          "tags_id",
-        ],
-      ],
       include: [
         {
           model: Users,
@@ -280,31 +248,17 @@ exports.getTemplates = async (req, res) => {
           attributes: ["id", "username"],
         },
         {
-          model: TemplateLikes,
-          attributes: [],
-        },
-        {
-          model: Forms,
-          attributes: [],
-        },
-        {
-          model: TemplateTags,
-          attributes: [],
-          include: [
-            {
-              model: Tags,
-              attributes: ["id"],
-            },
-          ],
+          model: Tags,
+          attributes: ["id"],
+          through: { attributes: [] },
+          required: false,
         },
       ],
       group: ["Templates.id", "author.id"],
-      order: [[orderBy, order.toUpperCase]],
+      order: [[orderBy, order.toUpperCase()]],
       limit: limit,
       offset: offset,
     });
-
-    console.log(templates);
 
     const totalTemplates = await Templates.count();
     res.status(STATUS_CODES.SUCCESS).json({
@@ -318,8 +272,6 @@ exports.getTemplates = async (req, res) => {
         imageUrl: template?.image_url || null,
         authorId: template.authorId,
         author: template.Users.username,
-        likes: template.dataValues.likes || 0,
-        responses: template.dataValues.responses || 0,
         topicId: template.topicId,
         tagsId: template.Tags ? template.Tags.map((tag) => tag.id) : [],
         createdAt: formatLastActivity(template.createdAt),

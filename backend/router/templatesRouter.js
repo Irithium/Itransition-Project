@@ -11,23 +11,22 @@ router.get(
   authenticateJWT,
   templateController.getUserTemplates
 );
-router.get("/filter", templateController.getFilteredTemplates);
 router.get("/search", templateController.searchTemplates);
 router.get("/:id", templateController.getTemplateById);
 router.put(
-  "/:id/update",
+  "/update/:id",
   authenticateJWT,
   checkPermissions(Templates),
   templateController.updateTemplate
 );
 router.put(
-  "/:id/access",
+  "/access/:id",
   authenticateJWT,
   checkPermissions(Templates),
   templateController.updateAccessSettings
 );
 router.delete(
-  "/:id/delete",
+  "/delete/:id",
   authenticateJWT,
   checkPermissions(Templates),
   templateController.deleteTemplate

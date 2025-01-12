@@ -3,9 +3,15 @@ const { Model, DataTypes } = require("sequelize");
 module.exports = (sequelize) => {
   class Comments extends Model {
     static associate(models) {
-      Comments.belongsTo(models.Users, { foreignKey: "authorId" });
+      Comments.belongsTo(models.Users, {
+        foreignKey: "authorId",
+        as: "author",
+      });
       Comments.belongsTo(models.Templates, { foreignKey: "templateId" });
-      Comments.hasMany(models.CommentLikes, { foreignKey: "commentId" });
+      Comments.hasMany(models.CommentLikes, {
+        foreignKey: "commentId",
+        as: "likes",
+      });
     }
   }
 

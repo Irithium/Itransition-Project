@@ -1,7 +1,7 @@
 const { Forms, Templates, Users, Questions } = require("../models");
 const { STATUS_CODES } = require("../constants");
-const { formatLastActivity } = require("../utils/dateFormatter");
-const { findUserById } = require("../utils/findUser.js");
+const { dateFormatter } = require("../utils/dateFormatter_utils.js");
+const { findUserById } = require("../services/findUser.js");
 
 exports.createForm = async (req, res) => {
   const { content, templateId, questionId } = req.body;
@@ -71,8 +71,8 @@ exports.getFormsByTemplate = async (req, res) => {
       username: form.Users.username,
       templateId: form.templateId,
       questionId: form.questionId,
-      createdAt: formatLastActivity(form.createdAt),
-      updatedAt: formatLastActivity(form.updatedAt),
+      createdAt: dateFormatter(form.createdAt),
+      updatedAt: dateFormatter(form.updatedAt),
       question: {
         title: form.Questions.title,
         description: form.Questions.description,
@@ -113,8 +113,8 @@ exports.getFormsByUser = async (req, res) => {
       authorId: form.authorId,
       templateId: form.templateId,
       questionId: form.questionId,
-      createdAt: formatLastActivity(form.createdAt),
-      updatedAt: formatLastActivity(form.updatedAt),
+      createdAt: dateFormatter(form.createdAt),
+      updatedAt: dateFormatter(form.updatedAt),
       template: {
         title: form.Templates.title,
         description: form.Templates.description,

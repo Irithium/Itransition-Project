@@ -1,6 +1,6 @@
 const { formatDistanceToNow } = require("date-fns");
 
-function formatLastActivity(lastActivityDate) {
+function dateFormatter(lastActivityDate) {
   if (!lastActivityDate) return "Never";
 
   const lastActivity = new Date(lastActivityDate);
@@ -8,5 +8,5 @@ function formatLastActivity(lastActivityDate) {
 }
 
 module.exports = {
-  formatLastActivity,
+  dateFormatter,
 };

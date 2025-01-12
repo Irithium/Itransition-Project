@@ -1,8 +1,8 @@
-const { Comments, CommentLikes, Templates } = require("../models");
+const { Comments, CommentLikes, Templates, Users } = require("../models");
 const { STATUS_CODES } = require("../constants");
-const { checkPermissions } = require("../middlewares/permitMiddleware");
-const { formatLastActivity } = require("../utils/dateFormatter");
-const { findUserById } = require("../utils/findUser.js");
+const _ = require("lodash");
+const { dateFormatter } = require("../utils/dateFormatter_utils.js");
+const { findUserById } = require("../services/findUser.js");
 
 exports.createComment = async (req, res) => {
   const { content, templateId } = req.body;
@@ -36,27 +36,27 @@ exports.getCommentsByUser = async (req, res) => {
       include: [
         {
           model: CommentLikes,
-          attributes: [
-            [sequelize.fn("COUNT", sequelize.col("CommentLikes.id")), "likes"],
-          ],
-          required: false,
+          attributes: ["id"],
+          as: "likes",
         },
       ],
+      group: ["Comments.id", "likes.id"],
       order: [["createdAt", "ASC"]],
     });
 
-    const formattedComments = comments.map((comment) => ({
+    const formattedComments = _.map(comments, (comment) => ({
       id: comment.id,
       content: comment.content,
-      createdAt: formatLastActivity(comment.createdAt),
-      updatedAt: formatLastActivity(comment.updatedAt),
       authorId: comment.authorId,
       templateId: comment.templateId,
-      likes: comment.dataValues.likes || 0,
+      likes: comment.likes.length || 0,
+      createdAt: dateFormatter(comment.createdAt),
+      updatedAt: dateFormatter(comment.updatedAt),
     }));
 
     res.status(STATUS_CODES.SUCCESS).json(formattedComments);
   } catch (error) {
+    console.log(error);
     res
       .status(STATUS_CODES.SERVER_ERROR)
       .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
@@ -79,28 +79,33 @@ exports.getCommentsByTemplate = async (req, res) => {
       where: { templateId },
       include: [
         {
+          model: Users,
+          attributes: ["username"],
+          as: "author",
+        },
+        {
           model: CommentLikes,
-          attributes: [
-            [sequelize.fn("COUNT", sequelize.col("CommentLikes.id")), "likes"],
-          ],
-          required: false,
+          attributes: ["id"],
+          as: "likes",
         },
       ],
+      group: ["Comments.id", "likes.id"],
       order: [["createdAt", "ASC"]],
     });
 
-    const formattedComments = comments.map((comment) => ({
+    const formattedComments = _.map(comments, (comment) => ({
       id: comment.id,
       content: comment.content,
-      createdAt: formatLastActivity(comment.createdAt),
-      updatedAt: formatLastActivity(comment.updatedAt),
       authorId: comment.authorId,
-      templateId: comment.templateId,
-      likes: comment.dataValues.likes || 0,
+      author: comment.author.username,
+      likes: comment.likes.length || 0,
+      createdAt: dateFormatter(comment.createdAt),
+      updatedAt: dateFormatter(comment.updatedAt),
     }));
 
     res.status(STATUS_CODES.SUCCESS).json(formattedComments);
   } catch (error) {
+    console.log(error);
     res
       .status(STATUS_CODES.SERVER_ERROR)
       .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
@@ -118,8 +123,6 @@ exports.updateComment = async (req, res) => {
         .status(STATUS_CODES.NOT_FOUND)
         .json({ error: req.t("ERROR_MESSAGES.COMMENT.NOT_FOUND") });
     }
-
-    await checkPermissions(req.user.id, comment);
 
     await comment.update({ content });
 

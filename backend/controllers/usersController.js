@@ -1,8 +1,8 @@
 const { Users } = require("../models");
 const { Op } = require("sequelize");
 const { STATUS_CODES } = require("../constants");
-const { formatLastActivity } = require("../utils/dateFormatter");
-const { findUsersById, findUserById } = require("../utils/findUser");
+const { dateFormatter } = require("../utils/dateFormatter_utils");
+const { findUsersById, findUserById } = require("../services/findUser");
 
 exports.getCurrentUser = async (req, res) => {
   try {
@@ -15,8 +15,8 @@ exports.getCurrentUser = async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       isBlocked: user.isBlocked,
-      createdAt: formatLastActivity(user.createdAt),
-      lastActivity: formatLastActivity(user.updatedAt),
+      createdAt: dateFormatter(user.createdAt),
+      lastActivity: dateFormatter(user.updatedAt),
     };
 
     res.status(STATUS_CODES.SUCCESS).json(newUser);
@@ -39,8 +39,8 @@ exports.updateUser = async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       isBlocked: user.isBlocked,
-      createdAt: formatLastActivity(user.createdAt),
-      lastActivity: formatLastActivity(user.updatedAt),
+      createdAt: dateFormatter(user.createdAt),
+      lastActivity: dateFormatter(user.updatedAt),
     };
 
     res
@@ -94,8 +94,8 @@ exports.getAllUsers = async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       isBlocked: user.isBlocked,
-      createdAt: formatLastActivity(user.createdAt),
-      lastActivity: formatLastActivity(user.updatedAt),
+      createdAt: dateFormatter(user.createdAt),
+      lastActivity: dateFormatter(user.updatedAt),
     }));
 
     res.status(STATUS_CODES.SUCCESS).json({
@@ -121,8 +121,8 @@ exports.getUserById = async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       isBlocked: user.isBlocked,
-      createdAt: formatLastActivity(user.createdAt),
-      lastActivity: formatLastActivity(user.updatedAt),
+      createdAt: dateFormatter(user.createdAt),
+      lastActivity: dateFormatter(user.updatedAt),
     };
 
     res.status(STATUS_CODES.SUCCESS).json(newUser);

@@ -104,6 +104,7 @@
       "INVALID_TYPE": "Tipo de me gusta inválido. Debe ser 'template' o 'comment'."
     },
     "GENERAL": {
+      "OBJECT_NOT_FOUND": "Objeto no encontrado.",
       "SERVER_ERROR": "Error interno del servidor, por favor inténtalo de nuevo más tarde.",
       "SEARCH_FAILED": "Hubo un error en la búsqueda, por favor inténtalo de nuevo.",
       "PERMISSIONS_REQUIRED": "Solo el autor o los administradores pueden realizar esta acción."

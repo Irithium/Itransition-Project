@@ -92,7 +92,8 @@
       "CREATED": "Comment created successfully."
     },
     "TAGS": {
-      "LOAD_FAILED": "Failed to load tags. Please try again later."
+      "LOAD_FAILED": "Failed to load tags. Please try again later.",
+      "NOT_FOUND": "Tags not found. Please ensure you choose tags."
     },
     "ADMIN": {
       "ACCESS_REQUIRED": "Admin privileges are required for this action.",
@@ -106,6 +107,7 @@
     "GENERAL": {
       "SERVER_ERROR": "Internal server error, please try again later.",
       "SEARCH_FAILED": "There has been a search error, please try again.",
+      "OBJECT_NOT_FOUND": "Object not found.",
       "PERMISSIONS_REQUIRED": "Only the author or admins can perform this action."
     },
     "ACCESS_SETTINGS": {

@@ -1,6 +1,6 @@
 const { Tags, Templates, Topics, TemplateLikes, Users } = require("../models");
 const { STATUS_CODES } = require("../constants");
-const { formatLastActivity } = require("../utils/dateFormatter");
+const { formatLastActivity } = require("../utils/dateFormatter_utils");
 
 exports.createTags = async (req, res) => {
   const tags = req.body;

@@ -4,7 +4,7 @@ const express = require("express");
 const passport = require("passport");
 const router = require("./router/router.js");
 const cookieParser = require("cookie-parser");
-const i18next = require("./utils/translate.js");
+const i18next = require("./utils/translate_utils.js");
 const i18nextMiddleware = require("i18next-http-middleware");
 
 require("dotenv").config();
@@ -39,7 +39,7 @@ const startServer = async () => {
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send(req.t("error_message"));
+  res.status(500).json({ error: req.t("error_message") });
 });
 
 startServer();

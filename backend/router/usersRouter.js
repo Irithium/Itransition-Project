@@ -11,7 +11,7 @@ router.get("/search", authenticateJWT, userController.searchUsers);
 
 router.get("/", authenticateJWT, isAdmin, userController.getAllUsers);
 router.get("/:id", authenticateJWT, isAdmin, userController.getUserById);
-router.put("/:id/update", authenticateJWT, userController.updateUserById);
+router.put("/update/:id", authenticateJWT, userController.updateUserById);
 router.put(
   "/admin/:action",
   authenticateJWT,

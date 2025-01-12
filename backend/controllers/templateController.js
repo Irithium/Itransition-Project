@@ -11,9 +11,15 @@ const {
   Comments,
   sequelize,
 } = require("../models");
-const { Op, Sequelize } = require("sequelize");
+const { Op } = require("sequelize");
 const { STATUS_CODES } = require("../constants");
-const { formatLastActivity } = require("../utils/dateFormatter");
+const { dateFormatter } = require("../utils/dateFormatter_utils");
+const _ = require("lodash");
+const {
+  formatTemplate,
+  formatTemplateDates,
+} = require("../utils/formatTemplate_utils");
+const { handleError } = require("../utils/handleError_utils");
 
 exports.createTemplate = async (req, res) => {
   const {
@@ -43,36 +49,9 @@ exports.createTemplate = async (req, res) => {
       accessSettings,
     });
 
-    for (let i = 0; i < questions.length; i++) {
-      const question = questions[i];
-      const newQuestion = await Questions.create({
-        ...question,
-        order: i + 1,
-        templateId: newTemplate.id,
-      });
+    await createOrUpdateQuestions(questions, newTemplate.id, req);
 
-      console.log(newQuestion);
-
-      if (
-        question.questionType === "checkbox" &&
-        question.options.length === 0
-      ) {
-        return res.status(STATUS_CODES.NOT_FOUND).json({
-          error: req.t("ERROR_MESSAGES.OPTION.NOT_FOUND"),
-        });
-      }
-      if (question.questionType === "checkbox" && question.options.length > 0) {
-        for (const option of question.options) {
-          await Options.create({
-            title: option.title,
-            value: option.value,
-            questionId: newQuestion.id,
-          });
-        }
-      }
-    }
-
-    if (tags && tags.length > 0) {
+    if (tags && !_.isEmpty(tags)) {
       for (const tag of tags) {
         let [tagInstance] = await Tags.findOrCreate({
           where: { title: tag },
@@ -82,23 +61,29 @@ exports.createTemplate = async (req, res) => {
           tagId: tagInstance.id,
         });
       }
-    }
+    } else
+      return res.status(STATUS_CODES.NOT_FOUND).json({
+        message: req.t("ERROR_MESSAGES.TAGS.NOT_FOUND"),
+        templateId: newTemplate.id,
+      });
 
     res.status(STATUS_CODES.CREATED).json({
       message: req.t("SUCCESS_MESSAGES.TEMPLATE.CREATED"),
       templateId: newTemplate.id,
     });
   } catch (error) {
-    console.log(error);
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.TEMPLATE.CREATION_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.TEMPLATE.CREATION_ERROR")
+    );
   }
 };
 
 exports.updateTemplate = async (req, res) => {
   const { id } = req.params;
-  const { title, description, topicId, imageUrl, questions } = req.body;
+  const { title, description, topicId, imageUrl, questions, tagsId } = req.body;
 
   try {
     const template = await Templates.findByPk(id);
@@ -115,100 +100,27 @@ exports.updateTemplate = async (req, res) => {
       image_url: imageUrl,
     });
 
-    const currentQuestions = await Questions.findAll({
-      where: { templateId: id },
-    });
+    if (questions) {
+      await createOrUpdateQuestions(questions, id, req);
+    }
 
-    const questionsToKeep = [];
-    for (const question of currentQuestions) {
-      const updatedQuestion = questions.find((q) => q.id === question.id);
-      if (updatedQuestion) {
-        if (question.isDeleted) {
-          await question.update({ isDeleted: false });
-        }
-        await question.update(updatedQuestion);
-        questionsToKeep.push(question.id);
-
-        if (
-          updatedQuestion.questionType === "checkbox" &&
-          updatedQuestion.options.length === 0
-        ) {
-          return res.status(STATUS_CODES.NOT_FOUND).json({
-            error: req.t("ERROR_MESSAGES.OPTION.NOT_FOUND"),
-          });
-        }
-
-        if (
-          updatedQuestion.questionType === "checkbox" &&
-          updatedQuestion.options.length > 0
-        ) {
-          await Options.destroy({ where: { questionId: question.id } });
-          for (const option of updatedQuestion.options) {
-            await Options.create({
-              title: option.title,
-              value: option.value,
-              questionId: question.id,
-            });
-          }
-        }
-      } else {
-        await question.update({ isDeleted: true });
+    if (tagsId) {
+      await TemplateTags.destroy({ where: { templateId: id } });
+      for (const tagId of tagsId) {
+        await TemplateTags.create({ templateId: id, tagId: tagId });
       }
     }
 
-    for (const question of questions) {
-      if (!questionsToKeep.some((q) => q === question.id)) {
-        const newQuestion = await Questions.create({
-          title: question.title,
-          description: question.description,
-          questionType: question.questionType,
-          isVisible: question.isVisible,
-          templateId: id,
-        });
-
-        if (
-          question.questionType === "checkbox" &&
-          question.options.length === 0
-        ) {
-          return res.status(STATUS_CODES.NOT_FOUND).json({
-            error: req.t("ERROR_MESSAGES.OPTION.NOT_FOUND"),
-          });
-        }
-
-        if (
-          question.questionType === "checkbox" &&
-          question.options.length > 0
-        ) {
-          for (const option of question.options) {
-            await Options.create({
-              title: option.title,
-              value: option.value,
-              questionId: newQuestion.id,
-            });
-          }
-        }
-      }
-    }
-
-    const updatedQuestions = await Questions.findAll({
-      where: {
-        templateId: id,
-        isDeleted: false,
-      },
-      order: [["order", "ASC"]],
+    res.status(STATUS_CODES.SUCCESS).json({
+      message: req.t("SUCCESS_MESSAGES.TEMPLATE.UPDATED"),
     });
-
-    for (let i = 0; i < updatedQuestions.length; i++) {
-      await updatedQuestions[i].update({ order: i + 1 });
-    }
-
-    res
-      .status(STATUS_CODES.SUCCESS)
-      .json({ message: req.t("SUCCESS_MESSAGES.TEMPLATE.UPDATED") });
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.TEMPLATE.UPDATE_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.TEMPLATE.UPDATE_ERROR")
+    );
   }
 };
 
@@ -229,79 +141,101 @@ exports.deleteTemplate = async (req, res) => {
       .status(STATUS_CODES.SUCCESS)
       .json({ message: req.t("SUCCESS_MESSAGES.TEMPLATE.DELETED") });
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.TEMPLATE.DELETING_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.TEMPLATE.DELETING_ERROR")
+    );
   }
 };
 
 exports.getTemplates = async (req, res) => {
-  const { orderBy = "title", order = "asc", page = 1, limit = 10 } = req.query;
+  const {
+    orderBy = "title",
+    order = "asc",
+    page = 1,
+    limit = 10,
+    topic,
+    tag,
+  } = req.query;
   const offset = (page - 1) * limit;
 
   try {
-    const templates = await Templates.findAll({
+    const where = {};
+    if (topic) where.topicId = topic;
+    if (tag) where["$Tags.id$"] = tag;
+
+    const { count, rows } = await Templates.findAndCountAll({
+      where,
       include: [
         {
+          model: TemplateLikes,
+          attributes: ["id"],
+          as: "likes",
+        },
+        {
+          model: Forms,
+          attributes: ["id"],
+        },
+        {
           model: Users,
+          attributes: ["username"],
           as: "author",
-          attributes: ["id", "username"],
         },
         {
           model: Tags,
           attributes: ["id"],
           through: { attributes: [] },
-          required: false,
+          required: true,
         },
       ],
-      group: ["Templates.id", "author.id"],
-      order: [[orderBy, order.toUpperCase()]],
+      group: ["Templates.id"],
       limit: limit,
       offset: offset,
     });
 
-    const totalTemplates = await Templates.count();
+    const formattedTemplates = _.map(rows, formatTemplate);
+    const sortedTemplates = _.orderBy(formattedTemplates, [orderBy], [order]);
+    const finalTemplates = _.map(sortedTemplates, formatTemplateDates);
+
     res.status(STATUS_CODES.SUCCESS).json({
-      total: totalTemplates,
+      total: count.length,
+      pages: Math.ceil(count.length / limit),
       page: Number(page),
       limit: Number(limit),
-      templates: templates.map((template) => ({
-        id: template.id,
-        title: template.title,
-        description: template.description,
-        imageUrl: template?.image_url || null,
-        authorId: template.authorId,
-        author: template.Users.username,
-        topicId: template.topicId,
-        tagsId: template.Tags ? template.Tags.map((tag) => tag.id) : [],
-        createdAt: formatLastActivity(template.createdAt),
-        updatedAt: formatLastActivity(template.updatedAt),
-      })),
+      templates: finalTemplates,
     });
   } catch (error) {
-    console.log(error);
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
 exports.getTemplateById = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
 
   try {
     const template = await Templates.findByPk(id, {
       include: [
         {
           model: Users,
-          as: "author",
           attributes: ["username"],
+          as: "author",
+        },
+        {
+          model: TemplateLikes,
+          attributes: ["id"],
+          as: "likes",
         },
         {
           model: Comments,
           attributes: ["id", "content", "createdAt", "updatedAt", "authorId"],
-          include: [{ model: Users, attributes: ["username"] }],
+          include: [{ model: Users, attributes: ["username"], as: "author" }],
           required: false,
           order: [["createdAt", "ASC"]],
         },
@@ -335,10 +269,11 @@ exports.getTemplateById = async (req, res) => {
         "Templates.id",
         "author.id",
         "Comments.id",
-        "Comments->User.id",
+        "Comments->author.id",
         "Questions.id",
         "Questions->options.id",
         "Tags.id",
+        "likes.id",
       ],
     });
 
@@ -348,7 +283,7 @@ exports.getTemplateById = async (req, res) => {
         .json({ error: req.t("ERROR_MESSAGES.TEMPLATE.NOT_FOUND") });
     }
 
-    const formattedQuestions = template.Questions.map((question) => {
+    const formattedQuestions = _.map(template.Questions, (question) => {
       if (question.questionType === "checkbox") {
         return {
           id: question.id,
@@ -375,24 +310,17 @@ exports.getTemplateById = async (req, res) => {
       };
     });
 
-    const comments = template.Comments.map((comment) => ({
+    const formattedComments = _.map(template.Comments, (comment) => ({
       id: comment.id,
       content: comment.content,
-      createdAt: formatLastActivity(comment.createdAt),
-      updatedAt: formatLastActivity(comment.updatedAt),
+      createdAt: dateFormatter(comment.createdAt),
+      updatedAt: dateFormatter(comment.updatedAt),
       authorId: comment.authorId,
-      username: comment.User.username,
+      username: comment.author.username,
       likes: comment.dataValues.likes || 0,
     }));
 
-    const likeCount = await TemplateLikes.count({
-      where: { templateId: id },
-    });
-    const commentCount = await Comments.count({
-      where: { templateId: id },
-    });
-
-    res.status(STATUS_CODES.SUCCESS).json({
+    const formattedTemplate = {
       id: template.id,
       title: template.title,
       description: template.description,
@@ -400,98 +328,23 @@ exports.getTemplateById = async (req, res) => {
       author: template.author.username,
       authorId: template.authorId,
       accessSettings: template.accessSettings,
-      likes: likeCount || 0,
-      responses: commentCount || 0,
       topicId: template.topicId,
       tagsId: template.Tags ? template.Tags.map((tag) => tag.id) : [],
       questions: formattedQuestions,
-      comments,
-      createdAt: formatLastActivity(template.createdAt),
-      updatedAt: formatLastActivity(template.updatedAt),
-    });
-  } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
-  }
-};
-
-exports.getFilteredTemplates = async (req, res) => {
-  const {
-    topicId,
-    tags,
-    orderBy = "title",
-    order = "asc",
-    page = 1,
-    limit = 10,
-  } = req.query;
-  const offset = (page - 1) * limit;
-
-  try {
-    const query = {
-      include: [
-        { model: Users, attributes: ["username"] },
-        { model: Topics, where: { id: topicId }, required: false },
-        {
-          model: Tags,
-          attributes: ["id"],
-          where: tags ? { id: tags.split(",") } : null,
-          through: { attributes: [] },
-          required: false,
-        },
-        {
-          model: TemplateLikes,
-          attributes: [
-            [sequelize.fn("COUNT", sequelize.col("TemplateLikes.id")), "likes"],
-          ],
-          required: false,
-        },
-        {
-          model: Forms,
-          attributes: [
-            [sequelize.fn("COUNT", sequelize.col("Forms.id")), "responses"],
-          ],
-          required: false,
-        },
-      ],
-      group: ["Templates.id", "Users.id", "Tags.id"],
-      order: [[orderBy, order.toUpperCase()]],
-      limit,
-      offset,
+      comments: formattedComments,
+      likes: template.likes.length || 0,
+      createdAt: dateFormatter(template.createdAt),
+      updatedAt: dateFormatter(template.updatedAt),
     };
 
-    const templates = await Templates.findAll(query);
-
-    const totalTemplates = await Templates.count({
-      where: {
-        ...(topicId && { topicId }),
-        ...(tags && { id: tags.split(",") }),
-      },
-    });
-
-    res.status(STATUS_CODES.SUCCESS).json({
-      total: totalTemplates,
-      page: Number(page),
-      limit: Number(limit),
-      templates: templates.map((template) => ({
-        id: template.id,
-        title: template.title,
-        description: template.description,
-        imageUrl: template?.image_url || null,
-        authorId: template.authorId,
-        author: template.Users.username,
-        likes: template.dataValues.likes || 0,
-        responses: template.dataValues.responses || 0,
-        topicId: template.topicId,
-        tagsId: template.Tags ? template.Tags.map((tag) => tag.id) : [],
-        createdAt: formatLastActivity(template.createdAt),
-        updatedAt: formatLastActivity(template.updatedAt),
-      })),
-    });
+    res.status(STATUS_CODES.SUCCESS).json({ template: formattedTemplate });
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.TEMPLATE.FILTERING_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -501,66 +354,50 @@ exports.getUserTemplates = async (req, res) => {
   const offset = (page - 1) * limit;
 
   try {
-    const query = {
+    const { count, rows } = await Templates.findAndCountAll({
       where: { authorId },
       include: [
-        { model: Users, attributes: ["username"] },
+        { model: Users, attributes: ["username"], as: "author" },
         {
           model: Tags,
           attributes: ["id"],
-          where: tags ? { id: tags.split(",") } : null,
           through: { attributes: [] },
           required: false,
         },
         {
           model: TemplateLikes,
-          attributes: [
-            [sequelize.fn("COUNT", sequelize.col("TemplateLikes.id")), "likes"],
-          ],
+          attributes: ["id"],
+          as: "likes",
           required: false,
         },
         {
           model: Forms,
-          attributes: [
-            [sequelize.fn("COUNT", sequelize.col("Forms.id")), "responses"],
-          ],
+          attributes: ["id"],
           required: false,
         },
       ],
-      group: ["Templates.id", "Users.id", "Tags.id"],
-      order: [[orderBy, order.toUpperCase()]],
-      limit,
-      offset,
-    };
-
-    const templates = await Templates.findAll(query);
-
-    const totalTemplates = await Templates.count({
-      where: { authorId },
+      group: ["Templates.id"],
+      limit: limit,
+      offset: offset,
     });
+
+    const formattedTemplates = rows.map(formatTemplate);
+    const sortedTemplates = _.orderBy(formattedTemplates, [orderBy], [order]);
+    const finalTemplates = sortedTemplates.map(formatTemplateDates);
 
     res.status(STATUS_CODES.SUCCESS).json({
-      total: totalTemplates,
+      total: count.length,
       page: Number(page),
       limit: Number(limit),
-      templates: templates.map((template) => ({
-        id: template.id,
-        title: template.title,
-        description: template.description,
-        imageUrl: template?.image_url || null,
-        authorId: template.authorId,
-        likes: template.dataValues.likes || 0,
-        responses: template.dataValues.responses || 0,
-        topicId: template.topicId,
-        tagsId: template.Tags ? template.Tags.map((tag) => tag.id) : [],
-        createdAt: formatLastActivity(template.createdAt),
-        updatedAt: formatLastActivity(template.updatedAt),
-      })),
+      templates: finalTemplates,
     });
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -575,23 +412,43 @@ exports.searchTemplates = async (req, res) => {
   const offset = (page - 1) * limit;
 
   try {
-    const templates = await Templates.findAll({
+    if (!query) {
+      return res.status(STATUS_CODES.BAD_REQUEST).json({
+        error: req.t("ERROR_MESSAGES.GENERAL.INVALID_QUERY"),
+      });
+    }
+    const search = decodeURIComponent(query).toLowerCase();
+    console.log(search);
+    const { count, rows } = await Templates.findAndCountAll({
       where: {
         [Op.or]: [
-          { title: { [Op.iLike]: `%${query}%` } },
-          { description: { [Op.iLike]: `%${query}%` } },
+          sequelize.where(
+            sequelize.fn("LOWER", sequelize.col("Templates.title")),
+            { [Op.like]: `%${search}%` }
+          ),
+          sequelize.where(
+            sequelize.fn("LOWER", sequelize.col("Templates.description")),
+            { [Op.like]: `%${search}%` }
+          ),
+          sequelize.where(
+            sequelize.fn("LOWER", sequelize.col("Questions.title")),
+            { [Op.like]: `%${search}%` }
+          ),
+          sequelize.where(
+            sequelize.fn("LOWER", sequelize.col("Questions.description")),
+            { [Op.like]: `%${search}%` }
+          ),
+          sequelize.where(
+            sequelize.fn("LOWER", sequelize.col("Comments.content")),
+            { [Op.like]: `%${search}%` }
+          ),
         ],
       },
       include: [
+        { model: Users, attributes: ["username"], as: "author" },
         {
           model: Questions,
-          where: {
-            [Op.or]: [
-              { title: { [Op.iLike]: `%${query}%` } },
-              { description: { [Op.iLike]: `%${query}%` } },
-            ],
-            isDeleted: false,
-          },
+
           required: false,
           include: [
             {
@@ -603,96 +460,57 @@ exports.searchTemplates = async (req, res) => {
         },
         {
           model: Comments,
-          where: { content: { [Op.iLike]: `%${query}%` } },
+
           required: false,
-          include: [{ model: Users, attributes: ["username"] }],
+          include: [{ model: Users, attributes: ["username"], as: "author" }],
+        },
+        {
+          model: TemplateLikes,
+          attributes: ["id"],
+          as: "likes",
         },
         {
           model: Tags,
-          attributes: ["id", "name"],
+          attributes: ["id", "title"],
           through: { attributes: [] },
         },
       ],
-      group: ["Templates.id", "Tags.id"],
-      order: [[orderBy, order.toUpperCase()]],
+      group: [
+        "Templates.id",
+        "author.id",
+        "Comments.id",
+        "Comments->author.id",
+        "Questions.id",
+        "Questions->options.id",
+        "Tags.id",
+        "likes.id",
+      ],
       limit: parseInt(limit),
       offset: parseInt(offset),
     });
 
-    const filteredTemplates = templates.filter((template) => {
-      const hasMatchingQuestion = template.Questions.some(
-        (question) =>
-          question.title.toLowerCase().includes(query.toLowerCase()) ||
-          question.description.toLowerCase().includes(query.toLowerCase())
-      );
-
-      const hasMatchingComment = template.Comments.some((comment) =>
-        comment.content.toLowerCase().includes(query.toLowerCase())
-      );
-
-      return (
-        template.title.toLowerCase().includes(query.toLowerCase()) ||
-        template.description.toLowerCase().includes(query.toLowerCase()) ||
-        hasMatchingQuestion ||
-        hasMatchingComment
-      );
-    });
-
-    const totalTemplates = await Templates.count({
-      where: {
-        [Op.or]: [
-          { title: { [Op.iLike]: `%${query}%` } },
-          { description: { [Op.iLike]: `%${query}%` } },
-        ],
-      },
-      include: [
-        {
-          model: Questions,
-          where: {
-            [Op.or]: [
-              { title: { [Op.iLike]: `%${query}%` } },
-              { description: { [Op.iLike]: `%${query}%` } },
-            ],
-            isDeleted: false,
-          },
-        },
-        {
-          model: Comments,
-          where: { content: { [Op.iLike]: `%${query}%` } },
-        },
-      ],
-    });
+    const formattedTemplates = _.map(rows, formatTemplate);
+    const sortedTemplates = _.orderBy(formattedTemplates, [orderBy], [order]);
+    const finalTemplates = _.map(sortedTemplates, formatTemplateDates);
 
     res.status(STATUS_CODES.SUCCESS).json({
-      total: totalTemplates,
       page: Number(page),
       limit: Number(limit),
-      templates: filteredTemplates.map((template) => ({
-        id: template.id,
-        title: template.title,
-        description: template.description,
-        imageUrl: template?.image_url || null,
-        authorId: template.authorId,
-        author: template.Users.username,
-        likes: template.dataValues.likes || 0,
-        responses: template.dataValues.responses || 0,
-        topicId: template.topicId,
-        tagsId: template.Tags ? template.Tags.map((tag) => tag.id) : [],
-        createdAt: formatLastActivity(template.createdAt),
-        updatedAt: formatLastActivity(template.updatedAt),
-      })),
+      templates: finalTemplates,
     });
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SEARCH_FAILED") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SEARCH_FAILED")
+    );
   }
 };
 
 exports.updateAccessSettings = async (req, res) => {
   const { id } = req.params;
   const { accessSettings } = req.body;
-  const userId = req.user.id;
 
   try {
     const template = await Templates.findByPk(id);
@@ -702,16 +520,17 @@ exports.updateAccessSettings = async (req, res) => {
         .json({ error: req.t("ERROR_MESSAGES.TEMPLATE.NOT_FOUND") });
     }
 
-    await checkPermissions(userId, template);
-
     await template.update({ accessSettings });
 
     res
       .status(STATUS_CODES.SUCCESS)
       .json({ message: req.t("SUCCESS_MESSAGES.ACCESS_SETTINGS.UPDATED") });
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.ACCESS_SETTINGS.UPDATE_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.ACCESS_SETTINGS.UPDATE_ERROR")
+    );
   }
 };

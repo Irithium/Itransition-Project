@@ -4,17 +4,15 @@ const findUserById = async (userId, req, res) => {
   try {
     const user = await Users.findByPk(userId);
     if (!user) {
-      res
+      return res
         .status(STATUS_CODES.NOT_FOUND)
         .json({ error: req.t("ERROR_MESSAGES.USER.NOT_FOUND") });
-      return null;
     }
     return user;
   } catch (error) {
-    res
+    return res
       .status(STATUS_CODES.SERVER_ERROR)
       .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
-    return null;
   }
 };
 

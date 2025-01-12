@@ -8,6 +8,7 @@ const {
   Topics,
 } = require("../models");
 const { STATUS_CODES } = require("../constants");
+const { dateFormatter } = require("../utils/dateFormatter_utils");
 
 exports.createLike = async (req, res) => {
   const { type, id } = req.params;
@@ -154,8 +155,8 @@ exports.getTemplatesByLikes = async (req, res) => {
       tagsId: like.Templates.Tags
         ? like.Template.Tags.map((tag) => tag.id)
         : [],
-      createdAt: formatLastActivity(like.Template.createdAt),
-      updatedAt: formatLastActivity(like.Template.updatedAt),
+      createdAt: dateFormatter(like.Template.createdAt),
+      updatedAt: dateFormatter(like.Template.updatedAt),
     }));
 
     res.status(STATUS_CODES.SUCCESS).json(templates);

@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
   class Users extends Model {
     static associate(models) {
       Users.hasMany(models.Templates, { foreignKey: "authorId" });
-      Users.hasMany(models.Comments, { foreignKey: "userId" });
+      Users.hasMany(models.Comments, { foreignKey: "authorId" });
       Users.hasMany(models.CommentLikes, { foreignKey: "userId" });
       Users.hasMany(models.TemplateLikes, { foreignKey: "userId" });
       Users.hasMany(models.Forms, { foreignKey: "userId" });

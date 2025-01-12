@@ -4,7 +4,9 @@ module.exports = (sequelize) => {
   class Forms extends Model {
     static associate(models) {
       Forms.belongsTo(models.Users, { foreignKey: "userId" });
-      Forms.belongsTo(models.Templates, { foreignKey: "templateId" });
+      Forms.belongsTo(models.Templates, {
+        foreignKey: "templateId",
+      });
       Forms.belongsTo(models.Questions, { foreignKey: "questionId" });
     }
   }

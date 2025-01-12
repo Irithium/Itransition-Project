@@ -157,14 +157,18 @@ exports.getTemplates = async (req, res) => {
     page = 1,
     limit = 10,
     topic,
-    tag,
+    tags,
   } = req.query;
   const offset = (page - 1) * limit;
 
   try {
     const where = {};
     if (topic) where.topicId = topic;
-    if (tag) where["$Tags.id$"] = tag;
+    if (tags) {
+      const tagArray = tags.replace(/[\[\]\s]/g, "").split(",");
+      where["$Tags.id$"] = { [Op.in]: tagArray };
+    }
+    console.log("Soy where: ", where);
 
     const { count, rows } = await Templates.findAndCountAll({
       where,
@@ -187,12 +191,13 @@ exports.getTemplates = async (req, res) => {
           model: Tags,
           attributes: ["id"],
           through: { attributes: [] },
-          required: true,
+          required: !!tags,
         },
       ],
-      group: ["Templates.id"],
+      group: ["Templates.id", "likes.id", "Forms.id", "author.id", "Tags.id"],
       limit: limit,
       offset: offset,
+      subQuery: false,
     });
 
     const formattedTemplates = _.map(rows, formatTemplate);

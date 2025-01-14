@@ -9,6 +9,7 @@ const {
 } = require("../models");
 const { STATUS_CODES } = require("../constants");
 const { dateFormatter } = require("../utils/dateFormatter_utils");
+const { handleError } = require("../utils/handleError_utils");
 
 exports.createLike = async (req, res) => {
   const { type, id } = req.params;
@@ -28,6 +29,9 @@ exports.createLike = async (req, res) => {
         templateId: id,
       });
 
+      req.user.updatedAt = new Date();
+      await req.user.save();
+
       return res.status(STATUS_CODES.CREATED).json({
         message: req.t("SUCCESS_MESSAGES.LIKE.CREATED"),
         like,
@@ -45,6 +49,9 @@ exports.createLike = async (req, res) => {
         commentId: id,
       });
 
+      req.user.updatedAt = new Date();
+      await req.user.save();
+
       return res.status(STATUS_CODES.CREATED).json({
         message: req.t("SUCCESS_MESSAGES.LIKE.CREATED"),
         like,
@@ -55,9 +62,12 @@ exports.createLike = async (req, res) => {
         .json({ error: req.t("ERROR_MESSAGES.LIKE.INVALID_TYPE") });
     }
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -79,6 +89,9 @@ exports.deleteLike = async (req, res) => {
 
       await like.destroy();
 
+      req.user.updatedAt = new Date();
+      await req.user.save();
+
       return res.status(STATUS_CODES.SUCCESS).json({
         message: req.t("SUCCESS_MESSAGES.LIKE.DELETED"),
       });
@@ -95,6 +108,9 @@ exports.deleteLike = async (req, res) => {
 
       await like.destroy();
 
+      req.user.updatedAt = new Date();
+      await req.user.save();
+
       return res.status(STATUS_CODES.SUCCESS).json({
         message: req.t("SUCCESS_MESSAGES.LIKE.DELETED"),
       });
@@ -104,9 +120,12 @@ exports.deleteLike = async (req, res) => {
         .json({ error: req.t("ERROR_MESSAGES.LIKE.INVALID_TYPE") });
     }
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -120,37 +139,32 @@ exports.getTemplatesByLikes = async (req, res) => {
         {
           model: Templates,
           include: [
-            { model: Users, attributes: ["username"] },
+            { model: Users, attributes: ["username"], as: "author" },
             {
               model: TemplateLikes,
-              attributes: [
-                [
-                  sequelize.fn("COUNT", sequelize.col("TemplateLikes.id")),
-                  "likes",
-                ],
-              ],
+              attributes: ["id"],
               required: false,
             },
             {
               model: Tags,
-              attributes: ["id", "name"],
+              attributes: ["id", "title"],
               through: { attributes: [] },
             },
-            { model: Topics, attributes: ["name"] },
+            { model: Topics, attributes: ["title"] },
           ],
         },
       ],
     });
 
-    const templates = likes.map((like) => ({
+    const templates = _.map(likes, (like) => ({
       id: like.Templates.id,
       title: like.Templates.title,
       description: like.Templates.description,
       imageUrl: like.Templates?.image_url || null,
       authorId: like.Templates.authorId,
-      author: like.Templates.Users.username,
-      likes: like.Templates.dataValues.likes || 0,
-      responses: like.Templates.dataValues.responses || 0,
+      author: like.Templates.author.username,
+      likes: like.Templates.likes.length || 0,
+      responses: like.Templates.responses.length || 0,
       topicId: like.Templates.topicId,
       tagsId: like.Templates.Tags
         ? like.Template.Tags.map((tag) => tag.id)
@@ -161,8 +175,11 @@ exports.getTemplatesByLikes = async (req, res) => {
 
     res.status(STATUS_CODES.SUCCESS).json(templates);
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };

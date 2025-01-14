@@ -6,8 +6,10 @@ const { findUsersById, findUserById } = require("../services/findUser");
 
 exports.getCurrentUser = async (req, res) => {
   try {
-    console.log(req.user.id);
     const user = await findUserById(req.user.id, req, res);
+
+    req.user.updatedAt = new Date();
+    await req.user.save();
 
     const newUser = {
       id: user.id,
@@ -21,9 +23,12 @@ exports.getCurrentUser = async (req, res) => {
 
     res.status(STATUS_CODES.SUCCESS).json(newUser);
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -39,17 +44,21 @@ exports.updateUser = async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       isBlocked: user.isBlocked,
-      createdAt: dateFormatter(user.createdAt),
-      lastActivity: dateFormatter(user.updatedAt),
     };
+
+    req.user.updatedAt = new Date();
+    await req.user.save();
 
     res
       .status(STATUS_CODES.SUCCESS)
       .json({ message: req.t("SUCCESS_MESSAGES.USER.UPDATED"), user: newUser });
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -59,10 +68,11 @@ exports.getAllUsers = async (req, res) => {
     orderDirection,
     page = 1,
     limit = 10,
-    adminFilter = null,
-    blockFilter = null,
+    isAdmin = null,
+    isBlocked = null,
     usernameInitial = "",
   } = req.query;
+  console.log(req);
 
   const orderOptions = {
     email: "email",
@@ -75,11 +85,13 @@ exports.getAllUsers = async (req, res) => {
 
   try {
     const whereConditions = {};
-    if (adminFilter !== null) whereConditions.isAdmin = adminFilter === "true";
-    if (blockFilter !== null)
-      whereConditions.isBlocked = blockFilter === "true";
+    if (isAdmin !== null) whereConditions.isAdmin = isAdmin === "true";
+    if (isBlocked !== null) whereConditions.isBlocked = isBlocked === "true";
     if (usernameInitial)
-      whereConditions.username = { [Op.iLike]: `${usernameInitial}%` }; // Filtrado por inicial del username.
+      whereConditions.username = { [Op.iLike]: `${usernameInitial}%` };
+
+    req.user.updatedAt = new Date();
+    await req.user.save();
 
     const users = await Users.findAndCountAll({
       where: whereConditions,
@@ -105,9 +117,12 @@ exports.getAllUsers = async (req, res) => {
       users: usersData,
     });
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -125,11 +140,17 @@ exports.getUserById = async (req, res) => {
       lastActivity: dateFormatter(user.updatedAt),
     };
 
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     res.status(STATUS_CODES.SUCCESS).json(newUser);
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -139,14 +160,28 @@ exports.updateUserById = async (req, res) => {
 
     const updatedUser = await user.update(req.body);
 
+    const newUser = {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      isBlocked: updatedUser.isBlocked,
+    };
+
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     return res.status(STATUS_CODES.SUCCESS).json({
       message: req.t("SUCCESS_MESSAGES.USER.UPDATED"),
-      user: updatedUser,
+      user: newUser,
     });
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -156,18 +191,21 @@ exports.deleteUser = async (req, res) => {
   try {
     await findUsersById(userIds, req, res);
 
-    await Users.destroy({ where: { id: userIds } });
-
-    req.user.lastActivity = new Date();
+    req.user.updatedAt = new Date();
     await req.user.save();
+
+    await Users.destroy({ where: { id: userIds } });
 
     res
       .status(STATUS_CODES.SUCCESS)
       .json({ message: req.t("SUCCESS_MESSAGES.USER_DELETED") });
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.SERVER_ERROR")
+    );
   }
 };
 
@@ -194,9 +232,12 @@ exports.updateAdminStatus = async (req, res) => {
           : { message: req.t("SUCCESS_MESSAGES.ADMIN.REMOVED") }
       );
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -223,9 +264,12 @@ exports.updateBlockStatus = async (req, res) => {
           : { message: req.t("SUCCESS_MESSAGES.USER_UNBLOCKED") }
       );
   } catch (error) {
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -256,9 +300,11 @@ exports.searchUsers = async (req, res) => {
       users: users.rows,
     });
   } catch (error) {
-    console.log(error);
-    return res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };

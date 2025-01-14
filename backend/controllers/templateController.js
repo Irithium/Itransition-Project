@@ -20,6 +20,9 @@ const {
   formatTemplateDates,
 } = require("../utils/formatTemplate_utils");
 const { handleError } = require("../utils/handleError_utils");
+const {
+  createOrUpdateQuestions,
+} = require("../services/createOrUpdateQuestions");
 
 exports.createTemplate = async (req, res) => {
   const {
@@ -54,18 +57,22 @@ exports.createTemplate = async (req, res) => {
     if (tags && !_.isEmpty(tags)) {
       for (const tag of tags) {
         let [tagInstance] = await Tags.findOrCreate({
-          where: { title: tag },
+          where: sequelize.where(
+            sequelize.fn("LOWER", sequelize.col("title")),
+            sequelize.fn("LOWER", tag)
+          ),
         });
         await TemplateTags.create({
           templateId: newTemplate.id,
           tagId: tagInstance.id,
         });
       }
-    } else
+    } else {
       return res.status(STATUS_CODES.NOT_FOUND).json({
         message: req.t("ERROR_MESSAGES.TAGS.NOT_FOUND"),
         templateId: newTemplate.id,
       });
+    }
 
     res.status(STATUS_CODES.CREATED).json({
       message: req.t("SUCCESS_MESSAGES.TEMPLATE.CREATED"),
@@ -83,7 +90,7 @@ exports.createTemplate = async (req, res) => {
 
 exports.updateTemplate = async (req, res) => {
   const { id } = req.params;
-  const { title, description, topicId, imageUrl, questions, tagsId } = req.body;
+  const { title, description, topicId, imageUrl, questions, tags } = req.body;
 
   try {
     const template = await Templates.findByPk(id);
@@ -104,10 +111,19 @@ exports.updateTemplate = async (req, res) => {
       await createOrUpdateQuestions(questions, id, req);
     }
 
-    if (tagsId) {
+    if (tags && !_.isEmpty(tags)) {
       await TemplateTags.destroy({ where: { templateId: id } });
-      for (const tagId of tagsId) {
-        await TemplateTags.create({ templateId: id, tagId: tagId });
+      for (const tag of tags) {
+        let [tagInstance] = await Tags.findOrCreate({
+          where: sequelize.where(
+            sequelize.fn("LOWER", sequelize.col("title")),
+            sequelize.fn("LOWER", tag)
+          ),
+        });
+        await TemplateTags.create({
+          templateId: id,
+          tagId: tagInstance.id,
+        });
       }
     }
 
@@ -262,6 +278,7 @@ exports.getTemplateById = async (req, res) => {
             },
           ],
           required: false,
+          order: [["order", "ASC"]],
         },
         {
           model: Tags,
@@ -315,6 +332,8 @@ exports.getTemplateById = async (req, res) => {
       };
     });
 
+    const sortedQuestions = _.orderBy(formattedQuestions, "order", "asc");
+
     const formattedComments = _.map(template.Comments, (comment) => ({
       id: comment.id,
       content: comment.content,
@@ -335,7 +354,7 @@ exports.getTemplateById = async (req, res) => {
       accessSettings: template.accessSettings,
       topicId: template.topicId,
       tagsId: template.Tags ? template.Tags.map((tag) => tag.id) : [],
-      questions: formattedQuestions,
+      questions: sortedQuestions,
       comments: formattedComments,
       likes: template.likes.length || 0,
       createdAt: dateFormatter(template.createdAt),

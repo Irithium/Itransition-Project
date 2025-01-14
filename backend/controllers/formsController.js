@@ -2,6 +2,7 @@ const { Forms, Templates, Users, Questions } = require("../models");
 const { STATUS_CODES } = require("../constants");
 const { dateFormatter } = require("../utils/dateFormatter_utils.js");
 const { findUserById } = require("../services/findUser.js");
+const { handleError } = require("../utils/handleError_utils.js");
 
 exports.createForm = async (req, res) => {
   const { content, templateId, questionId } = req.body;
@@ -29,14 +30,20 @@ exports.createForm = async (req, res) => {
       questionId,
     });
 
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     res.status(STATUS_CODES.CREATED).json({
       message: req.t("SUCCESS_MESSAGES.FORM.SUBMITTED"),
       form: newForm,
     });
   } catch (error) {
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -44,7 +51,7 @@ exports.getFormsByTemplate = async (req, res) => {
   const { templateId } = req.params;
 
   try {
-    const template = await findByPk(templateId);
+    const template = await Templates.findByPk(templateId);
 
     if (!template) {
       return res
@@ -81,11 +88,17 @@ exports.getFormsByTemplate = async (req, res) => {
       },
     }));
 
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     res.status(STATUS_CODES.SUCCESS).json(formattedForms);
   } catch (error) {
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -113,8 +126,6 @@ exports.getFormsByUser = async (req, res) => {
       authorId: form.authorId,
       templateId: form.templateId,
       questionId: form.questionId,
-      createdAt: dateFormatter(form.createdAt),
-      updatedAt: dateFormatter(form.updatedAt),
       template: {
         title: form.Templates.title,
         description: form.Templates.description,
@@ -125,13 +136,18 @@ exports.getFormsByUser = async (req, res) => {
         questionType: form.Questions.questionType,
         isDeleted: form.Questions.isDeleted,
       },
+      createdAt: dateFormatter(form.createdAt),
+      updatedAt: dateFormatter(form.updatedAt),
     }));
 
     res.status(STATUS_CODES.SUCCESS).json(formattedForms);
   } catch (error) {
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -149,14 +165,20 @@ exports.updateForm = async (req, res) => {
 
     await form.update({ content });
 
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     res.status(STATUS_CODES.SUCCESS).json({
       message: req.t("SUCCESS_MESSAGES.FORM.UPDATED"),
       form,
     });
   } catch (error) {
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -173,12 +195,18 @@ exports.deleteForm = async (req, res) => {
 
     await form.destroy();
 
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     res.status(STATUS_CODES.SUCCESS).json({
       message: req.t("SUCCESS_MESSAGES.FORM.DELETED"),
     });
   } catch (error) {
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };

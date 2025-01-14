@@ -1,7 +1,8 @@
 {
   "SUCCESS_MESSAGES": {
-    "REGISTERED": "¡Registro exitoso! ¡Bienvenido a bordo!",
-    "LOGIN": "¡Bienvenido de nuevo! ¡Nos alegra verte de nuevo!",
+    "REGISTERED": "¡Registro exitoso!",
+    "LOGIN": "¡Bienvenido de nuevo!",
+    "LOGOUT": "Cierre de sesión exitoso.",
     "TEMPLATE": {
       "CREATED": "Plantilla creada con éxito.",
       "UPDATED": "Plantilla actualizada con éxito.",
@@ -44,17 +45,25 @@
     },
     "DATA": {
       "UPDATED": "Tu información ha sido actualizada con éxito."
+    },
+    "AUTH": {
+      "RESET_EMAIL_SENT": "Correo electrónico de restablecimiento de contraseña enviado con éxito.",
+      "PASSWORD_RESET": "La contraseña ha sido restablecida con éxito."
     }
   },
   "ERROR_MESSAGES": {
     "AUTH": {
       "ACCESS_DENIED": "Acceso denegado. No se proporcionó token. Por favor, inicia sesión.",
       "USER_ALREADY_EXISTS": "Ya existe un usuario con este correo electrónico. Inicia sesión o prueba con otro correo.",
+      "USER_NOT_FOUND": "Usuario no encontrado. Por favor, verifica tus credenciales e inténtalo de nuevo.",
       "INVALID_CREDENTIALS": "Credenciales inválidas. Por favor, asegúrate de que tu información es correcta.",
       "REGISTER_FAILED": "No se pudo completar el registro. Por favor, inténtalo de nuevo más tarde.",
       "LOGIN_FAILED": "Error al iniciar sesión. Verifica tu información e inténtalo de nuevo.",
       "ACCOUNT_BLOCKED": "Tu cuenta ha sido bloqueada. Por favor, contacta con soporte.",
-      "INVALID_TOKEN": "Token inválido. Necesitas iniciar sesión de nuevo."
+      "INVALID_TOKEN": "Token inválido. Necesitas iniciar sesión de nuevo.",
+      "GENERAL": {
+        "SERVER_ERROR": "Error interno del servidor, por favor inténtalo de nuevo más tarde."
+      }
     },
     "USER": {
       "ID_REQUIRED": "Se requiere el ID del usuario. Por favor, verifica la información.",
@@ -92,7 +101,8 @@
       "CREATED": "Comentario creado con éxito."
     },
     "TAGS": {
-      "LOAD_FAILED": "Error al cargar las etiquetas. Por favor, inténtalo de nuevo más tarde."
+      "LOAD_FAILED": "Error al cargar las etiquetas. Por favor, inténtalo de nuevo más tarde.",
+      "NOT_FOUND": "Etiquetas no encontradas. Por favor, asegúrate de elegir etiquetas."
     },
     "ADMIN": {
       "ACCESS_REQUIRED": "Se requieren privilegios de administrador para esta acción.",
@@ -141,5 +151,14 @@
     "PRODUCT_LAUNCH": "Lanzamiento de Productos",
     "BUSINESS_STRATEGY": "Estrategia Empresarial",
     "OTHER": "Otro"
+  },
+  "EMAIL": {
+    "RESET_PASSWORD": {
+      "SUBJECT": "Solicitud de Restablecimiento de Contraseña SurveyCraft",
+      "MESSAGE": "Has recibido este correo electrónico porque tú (o alguien más) ha solicitado el restablecimiento de una contraseña. Por favor, haz clic en el siguiente enlace, o pégalo en tu navegador para completar el proceso:",
+      "IGNORE": "Si no solicitaste esto, por favor ignora este correo electrónico y tu contraseña permanecerá sin cambios.",
+      "DONT_REPLY": "Este es un correo electrónico automático, por favor no responda.",
+      "BUTTON": "Restablecer contraseña"
+    }
   }
 }

@@ -1,34 +1,6 @@
 const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const GitHubStrategy = require("passport-github2").Strategy;
 const { Users } = require("../models");
-
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/api/auth/google/callback",
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        let user = await Users.findOne({
-          where: { email: profile.emails[0].value },
-        });
-        if (!user) {
-          user = await Users.create({
-            username: profile.displayName,
-            email: profile.emails[0].value,
-            password: null,
-          });
-        }
-        return done(null, user);
-      } catch (error) {
-        return done(error, false);
-      }
-    }
-  )
-);
 
 passport.use(
   new GitHubStrategy(
@@ -39,16 +11,16 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        let user = await Users.findOne({
-          where: { email: profile.emails[0].value },
-        });
+        let user = await Users.findOne({ where: { githubId: profile.id } });
+
         if (!user) {
           user = await Users.create({
+            githubId: profile.id,
             username: profile.username,
             email: profile.emails[0].value,
-            password: null,
           });
         }
+
         return done(null, user);
       } catch (error) {
         return done(error, false);

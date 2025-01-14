@@ -28,9 +28,12 @@ exports.getTags = async (req, res) => {
 
     res.status(STATUS_CODES.SUCCESS).json(tags);
   } catch (error) {
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.TAGS.LOAD_FAILED") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.TAGS.LOAD_FAILED")
+    );
   }
 };
 
@@ -48,12 +51,7 @@ exports.getTemplatesByTag = async (req, res) => {
             { model: Topics, attributes: ["name"] },
             {
               model: TemplateLikes,
-              attributes: [
-                [
-                  sequelize.fn("COUNT", sequelize.col("TemplateLikes.id")),
-                  "likes",
-                ],
-              ],
+              attributes: ["id"],
               required: false,
             },
           ],
@@ -74,28 +72,25 @@ exports.getTemplatesByTag = async (req, res) => {
       imageUrl: template?.image_url || null,
       authorId: template.authorId,
       author: template.User.username,
-      likes: template.dataValues.likes || 0,
-      responses: template.dataValues.responses || 0,
+      likes: template.likes.length || 0,
+      responses: template.responses.length || 0,
       topicId: template.topicId,
       tagsId: template.Tags ? template.Tags.map((tag) => tag.id) : [],
       createdAt: formatLastActivity(template.createdAt),
       updatedAt: formatLastActivity(template.updatedAt),
-      comments: template.Comments.map((comment) => ({
-        id: comment.id,
-        content: comment.content,
-        createdAt: formatLastActivity(comment.createdAt),
-        updatedAt: formatLastActivity(comment.updatedAt),
-        userId: comment.userId,
-        username: comment.User.username,
-        likes: comment.dataValues.likes || 0,
-      })),
     }));
+
+    req.user.updatedAt = new Date();
+    await req.user.save();
 
     res.status(STATUS_CODES.SUCCESS).json(templates);
   } catch (error) {
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -113,14 +108,20 @@ exports.updateTag = async (req, res) => {
 
     await tag.update({ name });
 
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     res.status(STATUS_CODES.SUCCESS).json({
       message: req.t("SUCCESS_MESSAGES.TAGS.UPDATED"),
       tag,
     });
   } catch (error) {
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -137,12 +138,18 @@ exports.deleteTag = async (req, res) => {
 
     await tag.destroy();
 
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     res.status(STATUS_CODES.SUCCESS).json({
       message: req.t("SUCCESS_MESSAGES.TAGS.DELETED"),
     });
   } catch (error) {
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };

@@ -3,6 +3,7 @@ const { STATUS_CODES } = require("../constants");
 const _ = require("lodash");
 const { dateFormatter } = require("../utils/dateFormatter_utils.js");
 const { findUserById } = require("../services/findUser.js");
+const { handleError } = require("../utils/handleError_utils.js");
 
 exports.createComment = async (req, res) => {
   const { content, templateId } = req.body;
@@ -14,14 +15,20 @@ exports.createComment = async (req, res) => {
       authorId: req.user.id,
     });
 
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     res.status(STATUS_CODES.CREATED).json({
       message: req.t("SUCCESS_MESSAGES.COMMENT.CREATED"),
       comment: newComment,
     });
   } catch (error) {
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -54,12 +61,17 @@ exports.getCommentsByUser = async (req, res) => {
       updatedAt: dateFormatter(comment.updatedAt),
     }));
 
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     res.status(STATUS_CODES.SUCCESS).json(formattedComments);
   } catch (error) {
-    console.log(error);
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -103,12 +115,17 @@ exports.getCommentsByTemplate = async (req, res) => {
       updatedAt: dateFormatter(comment.updatedAt),
     }));
 
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     res.status(STATUS_CODES.SUCCESS).json(formattedComments);
   } catch (error) {
-    console.log(error);
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -126,14 +143,20 @@ exports.updateComment = async (req, res) => {
 
     await comment.update({ content });
 
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     res.status(STATUS_CODES.SUCCESS).json({
       message: req.t("SUCCESS_MESSAGES.COMMENT.UPDATED"),
       comment,
     });
   } catch (error) {
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };
 
@@ -150,12 +173,18 @@ exports.deleteComment = async (req, res) => {
 
     await comment.destroy();
 
+    req.user.updatedAt = new Date();
+    await req.user.save();
+
     res.status(STATUS_CODES.SUCCESS).json({
       message: req.t("SUCCESS_MESSAGES.COMMENT.DELETED"),
     });
   } catch (error) {
-    res
-      .status(STATUS_CODES.SERVER_ERROR)
-      .json({ error: req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR") });
+    return handleError(
+      res,
+      STATUS_CODES.SERVER_ERROR,
+      error,
+      req.t("ERROR_MESSAGES.GENERAL.SERVER_ERROR")
+    );
   }
 };

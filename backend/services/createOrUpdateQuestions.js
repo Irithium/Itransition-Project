@@ -13,19 +13,22 @@ exports.createOrUpdateQuestions = async (questions, templateId, req) => {
       if (question.isDeleted) {
         await question.update({ isDeleted: false });
       }
+
+      console.log(question);
+      console.log(updatedQuestion);
+      if (
+        question.questionType === "checkbox" &&
+        updatedQuestion.questionType !== "checkbox"
+      ) {
+        await Options.destroy({ where: { questionId: question.id } });
+      }
+
       await question.update(updatedQuestion);
       questionsToKeep.push(question.id);
 
       if (
         updatedQuestion.questionType === "checkbox" &&
-        _.isEmpty(question.options)
-      ) {
-        throw new Error(req.t("ERROR_MESSAGES.OPTION.NOT_FOUND"));
-      }
-
-      if (
-        updatedQuestion.questionType === "checkbox" &&
-        !_.isEmpty(question.options)
+        !_.isEmpty(updatedQuestion.options)
       ) {
         await Options.destroy({ where: { questionId: question.id } });
         for (const option of updatedQuestion.options) {
@@ -35,6 +38,11 @@ exports.createOrUpdateQuestions = async (questions, templateId, req) => {
             questionId: question.id,
           });
         }
+      } else if (
+        updatedQuestion.questionType === "checkbox" &&
+        _.isEmpty(updatedQuestion.options)
+      ) {
+        throw new Error(req.t("ERROR_MESSAGES.OPTION.NOT_FOUND"));
       }
     } else {
       await question.update({ isDeleted: true });
@@ -51,10 +59,6 @@ exports.createOrUpdateQuestions = async (questions, templateId, req) => {
         templateId,
       });
 
-      if (question.questionType === "checkbox" && _.isEmpty(question.options)) {
-        throw new Error(req.t("ERROR_MESSAGES.OPTION.NOT_FOUND"));
-      }
-
       if (
         question.questionType === "checkbox" &&
         !_.isEmpty(question.options)
@@ -66,6 +70,11 @@ exports.createOrUpdateQuestions = async (questions, templateId, req) => {
             questionId: newQuestion.id,
           });
         }
+      } else if (
+        question.questionType === "checkbox" &&
+        _.isEmpty(question.options)
+      ) {
+        throw new Error(req.t("ERROR_MESSAGES.OPTION.NOT_FOUND"));
       }
     }
   }

@@ -1,0 +1,164 @@
+{
+  "SUCCESS_MESSAGES": {
+    "REGISTERED": "Registro bem-sucedido!",
+    "LOGIN": "Bem-vindo de volta!",
+    "LOGOUT": "Logout bem-sucedido.",
+    "TEMPLATE": {
+      "CREATED": "Modelo criado com sucesso.",
+      "UPDATED": "Modelo atualizado com sucesso.",
+      "DELETED": "Modelo excluído com sucesso."
+    },
+    "FORM": {
+      "SUBMITTED": "Formulário enviado com sucesso. Obrigado pela sua resposta!",
+      "UPDATED": "Formulário atualizado com sucesso.",
+      "DELETED": "Formulário excluído com sucesso."
+    },
+    "USER": {
+      "UPDATED": "Dados do usuário atualizados com sucesso.",
+      "BLOCKED": "Usuário bloqueado com sucesso.",
+      "UNBLOCKED": "Usuário desbloqueado com sucesso.",
+      "DELETED": "Usuário excluído com sucesso."
+    },
+    "ADMIN": {
+      "ASSIGNED": "Privilégios de administrador atribuídos com sucesso.",
+      "REMOVED": "Privilégios de administrador revogados com sucesso."
+    },
+    "COMMENT": {
+      "CREATED": "Comentário criado com sucesso.",
+      "UPDATED": "Comentário atualizado com sucesso.",
+      "DELETED": "Comentário excluído com sucesso."
+    },
+    "TOPIC": {
+      "CREATED": "Tópico criado com sucesso.",
+      "DELETED": "Tópico excluído com sucesso."
+    },
+    "TAGS": {
+      "UPDATED": "Etiqueta atualizada com sucesso.",
+      "DELETED": "Etiqueta excluída com sucesso."
+    },
+    "LIKE": {
+      "CREATED": "Curtida adicionada com sucesso.",
+      "DELETED": "Curtida removida com sucesso."
+    },
+    "ACCESS_SETTINGS": {
+      "UPDATED": "Configurações de acesso atualizadas com sucesso."
+    },
+    "DATA": {
+      "UPDATED": "Suas informações foram atualizadas com sucesso."
+    },
+    "AUTH": {
+      "RESET_EMAIL_SENT": "E-mail de redefinição de senha enviado com sucesso.",
+      "PASSWORD_RESET": "A senha foi redefinida com sucesso."
+    }
+  },
+  "ERROR_MESSAGES": {
+    "AUTH": {
+      "ACCESS_DENIED": "Acesso negado. Nenhum token fornecido. Por favor, faça login.",
+      "USER_ALREADY_EXISTS": "Já existe um usuário com este e-mail. Faça login ou tente outro e-mail.",
+      "USER_NOT_FOUND": "Usuário não encontrado. Por favor, verifique suas credenciais e tente novamente.",
+      "INVALID_CREDENTIALS": "Credenciais inválidas. Por favor, verifique suas informações.",
+      "REGISTER_FAILED": "O registro não pôde ser concluído. Por favor, tente novamente mais tarde.",
+      "LOGIN_FAILED": "Falha no login. Verifique suas informações e tente novamente.",
+      "ACCOUNT_BLOCKED": "Sua conta foi bloqueada. Por favor, entre em contato com o suporte.",
+      "INVALID_TOKEN": "Token inválido. Você precisa fazer login novamente.",
+      "GENERAL": {
+        "SERVER_ERROR": "Erro interno do servidor, por favor tente novamente mais tarde."
+      }
+    },
+    "USER": {
+      "ID_REQUIRED": "ID do usuário é necessário. Por favor, verifique as informações.",
+      "ERROR_DELETING": "Não foi possível excluir o usuário. Por favor, tente novamente mais tarde.",
+      "ACTION_FAILED": "Ocorreu um erro. Por favor, tente novamente mais tarde.",
+      "NOT_FOUND": "Usuário não encontrado. Por favor, verifique suas credenciais e tente novamente."
+    },
+    "TEMPLATE": {
+      "NOT_FOUND": "Modelo não encontrado.",
+      "CREATION_ERROR": "Houve um erro ao criar o modelo. Por favor, tente novamente mais tarde.",
+      "MANAGEMENT_ERROR": "Você não tem permissão para gerenciar este modelo.",
+      "ACCESS_DENIED": "Você não tem acesso a este modelo. Verifique suas permissões.",
+      "INVALID_QUESTION_TYPE": "Tipo de pergunta inválido fornecido.",
+      "FILTERING_ERROR": "Houve um erro ao filtrar o modelo. Por favor, tente novamente.",
+      "DELETING_ERROR": "Erro ao excluir o modelo, por favor tente novamente.",
+      "UPDATE_ERROR": "Erro ao atualizar o modelo, por favor tente novamente.",
+      "QUESTIONS_LIMIT": "O modelo deve ter entre 1 e 16 perguntas.",
+      "QUESTIONS_TYPE_LIMIT": "Limite máximo para perguntas do tipo {{question.questionType}} atingido.",
+      "NO_TAGS": "Os modelos devem ter pelo menos uma etiqueta."
+    },
+    "TOPIC": {
+      "NOT_FOUND": "Tópico não encontrado. Por favor, verifique se o link está correto.",
+      "CREATION_ERROR": "Houve um erro ao criar o tópico. Por favor, tente novamente mais tarde.",
+      "LOAD_FAILED": "Falha ao carregar tópicos. Por favor, tente novamente mais tarde.",
+      "DELETING_ERROR": "Erro ao excluir o tópico, por favor tente novamente."
+    },
+    "FORM": {
+      "NOT_FOUND": "Formulário não encontrado. Por favor, verifique se o link está correto.",
+      "MANAGEMENT_ERROR": "Você não tem permissão para gerenciar este formulário.",
+      "ACCESS_DENIED": "Você não tem acesso a este formulário. Verifique se você tem as permissões necessárias."
+    },
+    "COMMENT": {
+      "NOT_FOUND": "Comentário não encontrado. Por favor, verifique se o link está correto.",
+      "LOAD_FAILED": "Falha ao carregar comentários. Por favor, tente novamente mais tarde.",
+      "CREATED": "Comentário criado com sucesso."
+    },
+    "TAGS": {
+      "LOAD_FAILED": "Falha ao carregar etiquetas. Por favor, tente novamente mais tarde.",
+      "NOT_FOUND": "Etiquetas não encontradas. Por favor, verifique se você escolheu etiquetas."
+    },
+    "ADMIN": {
+      "ACCESS_REQUIRED": "Privilégios de administrador são necessários para esta ação.",
+      "NOT_FOUND": "Etiqueta não encontrada.",
+      "LOAD_FAILED": "Falha ao carregar etiquetas. Por favor, tente novamente mais tarde."
+    },
+    "LIKE": {
+      "NOT_FOUND": "Curtida não encontrada.",
+      "INVALID_TYPE": "Tipo de curtida inválido. Deve ser 'template' ou 'comment'."
+    },
+    "GENERAL": {
+      "OBJECT_NOT_FOUND": "Objeto não encontrado.",
+      "SERVER_ERROR": "Erro interno do servidor, por favor tente novamente mais tarde.",
+      "SEARCH_FAILED": "Houve um erro na busca, por favor tente novamente.",
+      "PERMISSIONS_REQUIRED": "Apenas o autor ou administradores podem realizar esta ação."
+    },
+    "ACCESS_SETTINGS": {
+      "UPDATE_ERROR": "Erro ao atualizar as configurações de acesso, por favor tente novamente."
+    },
+    "IMAGES": {
+      "UPLOAD": "Erro ao fazer upload da imagem. Por favor, tente novamente.",
+      "NO_FILE": "Nenhum arquivo enviado. Por favor, selecione um arquivo para fazer upload."
+    },
+    "OPTION": {
+      "NOT_FOUND": "Nenhuma opção encontrada na pergunta."
+    }
+  },
+  "TOPICS": {
+    "EDUCATION": "Educação",
+    "QUIZZES": "Questionários",
+    "SURVEYS": "Pesquisas",
+    "FEEDBACK": "Feedback",
+    "JOB_APPLICATIONS": "Candidaturas de Emprego",
+    "HEALTH": "Saúde",
+    "PRODUCT_REVIEWS": "Avaliações de Produtos",
+    "EVENT_PLANNING": "Planejamento de Eventos",
+    "CUSTOMER_SATISFACTION": "Satisfação do Cliente",
+    "MARKET_RESEARCH": "Pesquisa de Mercado",
+    "TRAINING_AND_DEVELOPMENT": "Treinamento e Desenvolvimento",
+    "POLLS": "Enquetes",
+    "PERSONAL_DEVELOPMENT": "Desenvolvimento Pessoal",
+    "COMMUNITY_ENGAGEMENT": "Engajamento Comunitário",
+    "COMPANY_CULTURE": "Cultura Empresarial",
+    "WORKSHOPS": "Oficinas",
+    "TEAM_BUILDING": "Construção de Equipes",
+    "PRODUCT_LAUNCH": "Lançamento de Produtos",
+    "BUSINESS_STRATEGY": "Estratégia Empresarial",
+    "OTHER": "Outro"
+  },
+  "EMAIL": {
+    "RESET_PASSWORD": {
+      "SUBJECT": "Solicitação de Redefinição de Senha SurveyCraft",
+      "MESSAGE": "Você está recebendo este e-mail porque você (ou outra pessoa) solicitou a redefinição de uma senha. Por favor, clique no link a seguir, ou cole-o em seu navegador para completar o processo:",
+      "IGNORE": "Se você não solicitou isso, por favor ignore este e-mail e sua senha permanecerá inalterada.",
+      "DONT_REPLY": "Este é um e-mail automático, por favor não responda.",
+      "BUTTON": "Restabelecer Senha"
+    }
+  }
+}
